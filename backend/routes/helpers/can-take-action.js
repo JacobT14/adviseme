@@ -8,6 +8,7 @@ export const permissions = {
     "users:view",
     "permissions:change",
   ],
+  ADVISOR: [],
   UNAPPROVED: []
 }
 
