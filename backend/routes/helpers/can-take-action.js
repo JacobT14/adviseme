@@ -1,3 +1,5 @@
+import Boom from '@hapi/boom'
+
 export const permissions = {
   PRIMARY_ADMIN: [
     "users:edit",
@@ -19,12 +21,12 @@ export const permissionsList = {
 
 export const canTakeAction = ({user, action, tenantId}) => {
   if (user.tenantId !== tenantId) {
-    throw 'API.UNAUTHORIZED'
+    throw Boom.forbidden()
   }
   else if (permissions[user.permissionLevel].includes(action)) {
     return true
   }
   else {
-    throw 'API.UNAUTHORIZED'
+    throw Boom.forbidden()
   }
 }

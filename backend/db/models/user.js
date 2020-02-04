@@ -2,6 +2,10 @@ import sequelize from '../db'
 
 export const User = sequelize.define('user', {
   // attributes
+  id: {
+    type: sequelize.Sequelize.STRING,
+    primaryKey: true
+  },
   firstName: {
     type: sequelize.Sequelize.STRING,
     allowNull: false
@@ -15,10 +19,15 @@ export const User = sequelize.define('user', {
     allowNull: false,
     defaultValue: "ADVISOR"
   },
+  password: {
+    type: sequelize.Sequelize.STRING
+  },
   tenantId: {
     type:  sequelize.Sequelize.STRING,
     allowNull: false
   }
+}, {
+  alter: true
 })
 
 export default User

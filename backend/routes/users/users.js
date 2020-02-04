@@ -1,11 +1,7 @@
-import express from 'express'
-import crpyto from 'crypto'
 import { createUser } from './create-user'
-import { canTakeAction, permissions, permissionsList } from '../helpers/can-take-action'
+import { canTakeAction, permissionsList } from '../helpers/can-take-action'
 import { editUser } from './edit-user'
-import boom from '@hapi/boom'
-
-const router = express.Router()
+import Users from '../../db/models/user'
 
 export const userRoutes = [
   {
@@ -21,15 +17,15 @@ export const userRoutes = [
     method: "GET",
     path: '/users',
     handler: async (request, h) => {
-      const { user } = request
+      const  user  = request.auth.credentials
+      console.log({user})
       const tenantId = user.tenantId
       canTakeAction({ user, action: permissionsList.USERS_VIEW, tenantId })
-      const users = [
-        {
-          tenantId: 'testId',
-          userId: 'userId',
-          permissionLevel: 'PRIMARY_ADMIN',
-        }]
+      const users = await Users.findAll({
+        where: {
+          tenantId: tenantId
+        }
+      })
       return users
     }
   },
@@ -38,7 +34,8 @@ export const userRoutes = [
     path: '/users',
     handler: async (request, h) => {
       //Allow anonymous sign up, but mark them as unapproved.
-      const { email, firstName, lastName, password, tenantId, permissionLevel = 'UNAPPROVED' } = req.body
+      const  user  = request.auth.credentials
+      const { email, firstName, lastName, password, tenantId, permissionLevel = 'UNAPPROVED' } = request.payload
       canTakeAction({ user, action: permissionsList.USERS_CREATE, tenantId })
       const result = await createUser({ email, firstName, lastName, password, tenantId, permissionLevel })
       return result
@@ -56,7 +53,7 @@ export const userRoutes = [
         canTakeAction({ user, action: permissionsList.PERMISSIONS_CHANGE, tenantId })
       }
       const result = editUser({ userId, firstName, lastName, password, tenantId, permissionLevel })
-      return res.send(result)
+      return result
     }
   }
 ]

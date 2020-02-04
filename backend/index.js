@@ -3,6 +3,8 @@ const BasicAuth = require('hapi-auth-basic')
 import { _getTenantDb } from './db/tenantDb'
 import { tenantRoutes } from './routes/tenants'
 import { userRoutes } from './routes/users/users'
+import { getUserById } from './routes/users/get-user-by-id'
+import { hashPassword } from './routes/helpers/hash-password'
 
 const init = async () => {
 
@@ -18,13 +20,22 @@ const init = async () => {
   server.auth.strategy('simple', 'basic', {
     validate: async (request, username, password) => {
       // TODO
-      return {
-        isValid: true,
-        credentials: {
-          userId: "myId!",
-          permissionLevel: "PRIMARY_ADMIN",
-          tenantId: 1
+      const user = await getUserById({userId: username})
+      const {password: hashed} = user
+      const hash = hashPassword(password)
+      if(hash == hashed) {
+        return {
+          isValid: true,
+          credentials: {
+            userId: "myId!",
+            permissionLevel: "PRIMARY_ADMIN",
+            tenantId: 1
+          }
         }
+      }
+        else return {
+          isValid: false
+
       }
     }
   })

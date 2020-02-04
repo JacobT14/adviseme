@@ -1,4 +1,5 @@
 import { getUserById } from './get-user-by-id'
+import { hashPassword } from '../helpers/hash-password'
 
 export const editUser = async (args) => {
   const { userId, firstName, lastName, password, tenantId, permissionLevel = 'ADVISOR' } = args
@@ -6,11 +7,7 @@ export const editUser = async (args) => {
   if(!user) {
     throw 'API.NOT_FOUND'
   }
-  const passwordHash = crypto
-    .createHash('md5')
-    .update(`${password}`)
-    .digest('hex')
-    .toUpperCase()
+  const passwordHash = hashPassword(password)
   const users = {
     tenantId: tenantId,
     userId: userId,
