@@ -15,5 +15,5 @@ Congrats!  The backend api is now running!
 
 All business logic is contained in the /routes folder.
 
-TODO: Swagger docs
+Once the server is running, you can get to the swagger docs at ${server}:${port}/documentation (i.e. http://localhost:3000/documentation)
   
