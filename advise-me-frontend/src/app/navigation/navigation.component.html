@@ -1,0 +1,40 @@
+<nav
+  *ngIf="auth.isAuthenticated"
+  class="navbar navbar-expand-lg navbar-dark bg-dark"
+>
+  <a class="navbar-brand" href="#">AdviseMe</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="home"
+          routerLink="/home"
+          routerLinkActive="active"
+          >Home</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="/users"
+          routerLink="/users"
+          routerLinkActive="active"
+          >Users</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>

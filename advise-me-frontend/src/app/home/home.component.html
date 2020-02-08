@@ -1,0 +1,15 @@
+<div>
+  <div *ngIf="!isAuthenticated" class="jumbotron centered">
+    <div class="container">
+      <i class="fas fa-user-friends fa-9x"></i>
+      <h1 class="display-3">AdviseMe</h1>
+      <p class="lead">Don't keep your opinion, share them for values!</p>
+      <hr />
+      <a class="btn btn-light btn-lg" href="/register" role="button"
+        >Register</a
+      >
+      <a class="btn btn-dark btn-lg" href="/login" role="button">Login</a>
+    </div>
+  </div>
+  <app-authenticated-home *ngIf="isAuthenticated"></app-authenticated-home>
+</div>

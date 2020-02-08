@@ -1,0 +1,6 @@
+<div>
+  <app-users-list *ngIf="users" [users]="users"></app-users-list>
+  <div *ngIf="!users" class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

@@ -1,0 +1,99 @@
+<div *ngIf="user">
+  <div class="container mt-5">
+    <h1>{{ isAddMode ? "Create User" : "Edit User" }}</h1>
+    <p *ngIf="successMessage">{{ successMessage }}</p>
+
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card">
+          <div class="card-body">
+            <!-- Makes POST request to /register route -->
+            <form (ngSubmit)="isAddMode ? create() : update()">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  [(ngModel)]="user.email"
+                  type="email"
+                  class="form-control"
+                  name="username"
+                />
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  [(ngModel)]="user.password"
+                  type="password"
+                  class="form-control"
+                  name="password"
+                />
+              </div>
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input
+                  [(ngModel)]="user.firstName"
+                  type="text"
+                  class="form-control"
+                  name="firstName"
+                />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input
+                  [(ngModel)]="user.lastName"
+                  type="text"
+                  class="form-control"
+                  name="lastName"
+                />
+              </div>
+              <div class="form-group">
+                <label for="title">Job Title</label>
+                <input
+                  [(ngModel)]="user.title"
+                  type="text"
+                  class="form-control"
+                  name="title"
+                />
+              </div>
+              <div class="form-group">
+                <label for="department">Department</label>
+                <input
+                  [(ngModel)]="user.department"
+                  type="text"
+                  class="form-control"
+                  name="department"
+                />
+              </div>
+              <div class="form-group">
+                <label for="permission">Permission</label>
+                <select
+                  class="form-control"
+                  [(ngModel)]="user.permissionLevel"
+                  name="permissionLevel"
+                >
+                  <option>PRIMARY_ADMIN</option>
+                  <option>ADMIN</option>
+                  <option>ADVISOR</option>
+                  <option>UNAPPROVED</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-dark">
+                {{ isAddMode ? "Create" : "Update" }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-sm-4">
+      <div class="card social-block">
+        <div class="card-body">
+          <a class="btn btn-block" href="/auth/google" role="button">
+            <i class="fab fa-google"></i>
+            Sign Up with Google
+          </a>
+        </div>
+      </div>
+    </div> -->
+    </div>
+  </div>
+</div>
