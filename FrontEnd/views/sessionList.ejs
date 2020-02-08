@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+
+<div class="jumbotron text-center">
+  <div class="container">
+    <i class="fas fa-user-friends fa-6x"></i>
+    <h1 class="display-3">Choose one session to join!</h1>
+    <p class="dark-text">Active sessions are shown below.</p>
+
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Topic</th>
+          <th scope="col">Creator</th>
+          <th scope="col">Department Requirements</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i=0;i<sessions.length;i++){ %>
+          <% console.log(sessions.length) %>
+          <form action="/sessionStartingPage" method="GET">
+            <tr>
+              <th scope="row"><%= i%></th>
+              <td><%= sessions[i].topic %></td>
+              <td><%= sessions[i].creatorEmail %></td>
+              <td><%= sessions[i].departmentFilter %></td>
+              <td><button type="submit" name="joinBtn" value="<%= sessions[i]._id %>">Join</button></td>
+            </tr>
+          </form>    
+      <% } %>
+        
+      </tbody>
+    </table>
+    
+    <hr>
+    
+    <a class="btn btn-light btn-lg" href="/logout" role="button">Log Out</a>
+    <a class="btn btn-dark btn-lg" href="/submit" role="button">Join</a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

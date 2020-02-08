@@ -1,0 +1,20 @@
+[
+    {
+        "topic": "Salary",
+        "creatorFirstName": "Mike",
+        "creatorEmail": "MikeW@gg.com",
+        "departmentFilter": "Finance"
+    },
+    {
+        "topic": "Office Environment",
+        "creatorFirstName": "Jack",
+        "creatorEmail": "JackL@gg.com",
+        "departmentFilter": "Supply Chain Management"
+    },
+    {
+        "topic": "Gym polocies",
+        "creatorFirstName": "Luke",
+        "creatorEmail": "LukeR@gg.com",
+        "departmentFilter": "Human Resource"
+    }
+]
