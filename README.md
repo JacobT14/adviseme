@@ -3,17 +3,19 @@ ASU Capstone Project for Advisement Sessions / Surveys
 
 ## How To Start - Backend
 
-1. Add a .env readme with the following keys, and give them correct values:
-  * DATABASE_HOST
-  * DATABASE_PORT
-  * DATABASE_USER
-  * DATABASE_PASSWORD
+1. change directory to backend
 2. run npm install
-3. run npm start
+3. run node app.js
 
 Congrats!  The backend api is now running!
 
-All business logic is contained in the /routes folder.
+## How To Start - Frontend
+Make sure you have the angular-cli installed globally by running npm install -g angular-cli
 
-Once the server is running, you can get to the swagger docs at ${server}:${port}/documentation (i.e. http://localhost:3000/documentation)
+1. change directory to frontend
+2. run npm install
+3. run "ng serve"
+
+When developing, it is super helpful to use "ng g c $component_name"(i.e. users-list).
+This will create the scaffold of a component so you don't have to create a new folder and the couple of files that it generates.
   
