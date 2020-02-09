@@ -23,12 +23,18 @@ const routes: Routes = [
   {
     path: "users",
     component: UsersComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService],
+    data: {
+      expectedRole: "ADMIN"
+    }
   },
   {
     path: "users/:userId",
     component: UserComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService],
+    data: {
+      expectedRole: "ADMIN"
+    }
   },
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "**", redirectTo: "home", pathMatch: "full" }

@@ -5,6 +5,12 @@
     <div class="col-sm-8">
       <div class="card">
         <div class="card-body">
+          <ngb-alert
+            *ngIf="validationMessage"
+            [type]="'danger'"
+            (close)="close(alert)"
+            >{{ validationMessage }}</ngb-alert
+          >
           <!-- Makes POST request to /register route -->
           <form (ngSubmit)="register()">
             <div class="form-group">

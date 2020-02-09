@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { RestService } from "../rest.service";
 
 @Component({
@@ -21,17 +21,21 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  close(alert) {
+    // this.alert.nativeElement.classList.remove("show");
+    this.validationMessage = null;
+  }
+
   async register(): Promise<void> {
     this.validationMessage = null;
     try {
       const data = await this.rest.register(this.user);
       console.log({ data });
-      localStorage.setItem("user", this.user.username);
-      localStorage.setItem("password", this.user.password);
+      localStorage.setItem("user", JSON.stringify(data));
     } catch (e) {
-      if (e.error === "UNAUTHORIZED") {
-        this.validationMessage = "Invalid Username or Password";
-      }
+      console.log({ e });
+
+      this.validationMessage = "User Already Exists";
     }
   }
 }

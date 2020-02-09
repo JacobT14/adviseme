@@ -12,6 +12,10 @@ export class UserComponent implements OnInit {
 
   successMessage: String;
 
+  validationMessage: String;
+
+  isLoading: boolean;
+
   isAddMode: boolean;
 
   user: any;
@@ -29,6 +33,15 @@ export class UserComponent implements OnInit {
     });
   }
 
+  close(alert) {
+    // this.alert.nativeElement.classList.remove("show");
+    if (alert == "success") {
+      this.successMessage = null;
+    } else {
+      this.validationMessage = null;
+    }
+  }
+
   async update(): Promise<void> {
     console.log("UPDATING!");
     const data = await this.rest.updateUser(this.user.email, this.user);
@@ -37,7 +50,11 @@ export class UserComponent implements OnInit {
 
   async create(): Promise<void> {
     console.log("UPDATING!");
-    const data = await this.rest.register(this.user);
-    this.successMessage = "Success!";
+    try {
+      const data = await this.rest.register(this.user);
+      this.successMessage = "Success!";
+    } catch (e) {
+      this.validationMessage = "User already exists.";
+    }
   }
 }

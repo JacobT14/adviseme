@@ -5,6 +5,12 @@
     <div class="col-sm-8">
       <div class="card">
         <div class="card-body">
+          <ngb-alert
+            *ngIf="validationMessage"
+            [type]="'danger'"
+            (close)="close(alert)"
+            >{{ validationMessage }}</ngb-alert
+          >
           <!-- Makes POST request to /login route -->
           <form (ngSubmit)="login()">
             <div class="form-group">
@@ -30,7 +36,6 @@
               >Register</a
             >
           </form>
-          <p *ngIf="validationMessage">{{ validationMessage }}</p>
         </div>
       </div>
     </div>

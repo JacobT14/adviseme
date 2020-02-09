@@ -16,6 +16,7 @@ import { UserComponent } from "./user/user.component";
 import { AuthGuardService } from "./auth-guard-service";
 import { RouterModule } from "@angular/router";
 import { AuthService } from "./authentication/auth-service";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AuthService } from "./authentication/auth-service";
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    NgbModule
   ],
   providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]

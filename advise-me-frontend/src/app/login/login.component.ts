@@ -19,6 +19,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  close(alert) {
+    // this.alert.nativeElement.classList.remove("show");
+    this.validationMessage = null;
+  }
+
   async login(): Promise<void> {
     this.validationMessage = null;
     try {

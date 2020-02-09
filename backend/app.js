@@ -38,7 +38,7 @@ mongoose.connect(
 
 /*  userDb        Database    ---------------------------------------------------------------------------*/
 const userSchema = new mongoose.Schema({
-  email: String,
+  email: { type: String, unique: true, required: true, dropDups: true },
   password: String,
   firstName: String,
   lastName: String,
@@ -103,7 +103,7 @@ app.post("/register", function(req, res) {
   newUser.save(function(err) {
     if (err) {
       console.log({ err });
-      res.send(err);
+      res.send(500, err);
     } else {
       console.log("SAVED!");
       res.json(req.body);

@@ -9,6 +9,38 @@ export class AuthService {
       return false;
     }
   }
+
+  get isAdmin() {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const userParsed = JSON.parse(user);
+      return (
+        userParsed.permissionLevel === "PRIMARY_ADMIN" ||
+        userParsed.permissionLevel === "ADMIN"
+      );
+    } else {
+      return false;
+    }
+  }
+
+  get isPrimaryAdmin() {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const userParsed = JSON.parse(user);
+      return userParsed.permissionLevel === "PRIMARY_ADMIN";
+    } else {
+      return false;
+    }
+  }
+  get isAdvisor() {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const userParsed = JSON.parse(user);
+      return userParsed.permissionLevel === "ADVISOR";
+    } else {
+      return false;
+    }
+  }
 }
 
 export default AuthService;

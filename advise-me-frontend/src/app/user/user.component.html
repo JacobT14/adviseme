@@ -1,12 +1,25 @@
 <div *ngIf="user">
   <div class="container mt-5">
     <h1>{{ isAddMode ? "Create User" : "Edit User" }}</h1>
-    <p *ngIf="successMessage">{{ successMessage }}</p>
 
     <div class="row">
       <div class="col-sm-8">
         <div class="card">
           <div class="card-body">
+            <ngb-alert
+              id="success"
+              *ngIf="successMessage"
+              [type]="'success'"
+              (close)="close('success')"
+              >{{ successMessage }}</ngb-alert
+            >
+            <ngb-alert
+              id="danger"
+              *ngIf="validationMessage"
+              [type]="'danger'"
+              (close)="close('danger')"
+              >{{ validationMessage }}</ngb-alert
+            >
             <!-- Makes POST request to /register route -->
             <form (ngSubmit)="isAddMode ? create() : update()">
               <div class="form-group">
