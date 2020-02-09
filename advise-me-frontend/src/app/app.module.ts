@@ -17,6 +17,7 @@ import { AuthGuardService } from "./auth-guard-service";
 import { RouterModule } from "@angular/router";
 import { AuthService } from "./authentication/auth-service";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { MDBBootstrapModule } from "angular-bootstrap-md";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
     FormsModule,
     HttpClientModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    MDBBootstrapModule.forRoot()
   ],
   providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]

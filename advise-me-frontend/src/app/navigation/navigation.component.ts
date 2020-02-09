@@ -12,4 +12,14 @@ export class NavigationComponent implements OnInit {
   constructor(private router: Router, public auth: AuthService) {}
 
   ngOnInit(): void {}
+
+  collapsed = true;
+  toggleCollapsed(): void {
+    this.collapsed = !this.collapsed;
+  }
+
+  logout() {
+    localStorage.removeItem("user");
+    this.router.navigateByUrl("/home");
+  }
 }

@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  close(alert) {
+  close() {
     // this.alert.nativeElement.classList.remove("show");
     this.validationMessage = null;
   }
