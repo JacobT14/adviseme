@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { RestService } from "../rest.service";
+import AuthService from "../authentication/auth-service";
 
 @Component({
   selector: "app-user",
@@ -8,7 +9,11 @@ import { RestService } from "../rest.service";
   styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private rest: RestService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private rest: RestService,
+    public auth: AuthService
+  ) {}
 
   successMessage: String;
 
