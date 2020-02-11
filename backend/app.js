@@ -8,24 +8,7 @@ const mongoose = require("mongoose");
 //const functions = require(__dirname + "/functions.js");
 const encryption = require("mongoose-encryption");
 const cors = require("cors");
-
-const app = express();
-
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
-app.use(cors());
-app.use(bodyParser.json());
-
-//connect to mongoDb locally
-/*
-mongoose.connect("mongodb://localhost:27017/userDb", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-*/
+const basicAuth = require("express-basic-auth");
 
 /* database served on Atlas*/
 mongoose.connect(
@@ -74,6 +57,41 @@ const sessionSchema = new mongoose.Schema({
 
 const Session = new mongoose.model("Session", sessionSchema);
 
+const app = express();
+
+const myAsyncAuthorizer = (username, password, cb) => {
+  try {
+    const user = User.findOne({ email: username })
+      .then(user => {
+        if (user && user.password == password) {
+          return cb(null, true);
+        }
+        return cb(null, false);
+      })
+      .catch(e => {
+        throw e;
+      });
+  } catch (e) {
+    return cb(null, false);
+  }
+};
+
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+app.use(cors());
+app.use(bodyParser.json());
+
+//connect to mongoDb locally
+/*
+mongoose.connect("mongodb://localhost:27017/userDb", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+*/
+
 // app.get("/",function(req,res){
 //     res.render("home");
 // })
@@ -121,6 +139,36 @@ app.post("/register", function(req, res) {
   });
 });
 
+app.post("/login", function(req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  User.findOne({ email: username }, function(err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log({ foundUser });
+      if (foundUser && foundUser.password == password) {
+        console.log({ foundUser });
+        return res.json(foundUser);
+        // Session.find({},function(err, foundSessions){
+        //     console.log(foundSessions);
+        //     res.render("sessionList", {sessions: foundSessions});
+        // })
+      } else {
+        res.status(401).send();
+      }
+    }
+  });
+});
+
+app.use(
+  basicAuth({
+    authorizer: myAsyncAuthorizer,
+    authorizeAsync: true
+  })
+);
+
 app.put("/users/:userId", function(req, res) {
   const {
     password,
@@ -156,29 +204,6 @@ app.get("/users/:userId", async function(req, res) {
   console.log({ users });
   const [user] = users;
   res.json(user);
-});
-
-app.post("/login", function(req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  User.findOne({ email: username }, function(err, foundUser) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log({ foundUser });
-      if (foundUser && foundUser.password == password) {
-        console.log({ foundUser });
-        return res.json(foundUser);
-        // Session.find({},function(err, foundSessions){
-        //     console.log(foundSessions);
-        //     res.render("sessionList", {sessions: foundSessions});
-        // })
-      } else {
-        res.status(401).send();
-      }
-    }
-  });
 });
 
 app.post("/sessions", async function(req, res) {

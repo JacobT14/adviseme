@@ -2,6 +2,15 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class AuthService {
+  get user() {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const userParsed = JSON.parse(user);
+      return userParsed;
+    } else {
+      return null;
+    }
+  }
   get isAuthenticated() {
     if (localStorage.getItem("user")) {
       return true;

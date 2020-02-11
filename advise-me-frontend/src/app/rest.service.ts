@@ -4,6 +4,7 @@ import {
   HttpHeaders,
   HttpErrorResponse
 } from "@angular/common/http";
+import AuthService from "./authentication/auth-service";
 
 const endpoint = "http://localhost:3000/";
 
@@ -11,11 +12,23 @@ const endpoint = "http://localhost:3000/";
   providedIn: "root"
 })
 export class RestService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, public auth: AuthService) {}
+
+  getHeaders(headers: HttpHeaders = new HttpHeaders()): HttpHeaders {
+    console.log(this.auth.user);
+    console.log(btoa(`${this.auth?.user?.email}:${this.auth?.user?.password}`));
+    return headers.append(
+      "Authorization",
+      "Basic " + btoa(`${this.auth?.user?.email}:${this.auth?.user?.password}`)
+    );
+  }
 
   async post(url, body) {
     try {
-      const data = await this.http.post(url, body).toPromise();
+      const httpOptions = {
+        headers: this.getHeaders()
+      };
+      const data = await this.http.post(url, body, httpOptions).toPromise();
       return data;
     } catch (err) {
       console.log({ err });
@@ -28,7 +41,10 @@ export class RestService {
 
   async put(url, body) {
     try {
-      const data = await this.http.put(url, body).toPromise();
+      const httpOptions = {
+        headers: this.getHeaders()
+      };
+      const data = await this.http.put(url, body, httpOptions).toPromise();
       return data;
     } catch (err) {
       console.log({ err });
@@ -39,9 +55,14 @@ export class RestService {
     }
   }
 
-  async get(url) {
+  async get(url, options: any = {}) {
     try {
-      const data = await this.http.get(url).toPromise();
+      const newHeaders = this.getHeaders(options?.headers);
+      options.headers = newHeaders;
+
+      console.log({ options });
+
+      const data = await this.http.get(url, options).toPromise();
       return data;
     } catch (err) {
       console.log({ err });
@@ -78,5 +99,23 @@ export class RestService {
     const data = await this.put(`${endpoint}users/${userId}`, user);
     console.log({ data });
     return data;
+  }
+
+  async createSession(session) {
+    return this.post(`${endpoint}sessions`, session);
+  }
+
+  async updateSession(sessionId, sessionUpdates) {
+    return this.put(`${endpoint}sessions/${sessionId}`, sessionUpdates);
+  }
+
+  async getSessionById(id) {
+    return this.get(`${endpoint}sessions/${id}`);
+  }
+
+  async getSessionsByUserIds(userIds: [String]) {
+    return this.get(`${endpoint}sessions`, {
+      params: userIds
+    });
   }
 }
