@@ -56,12 +56,22 @@ const User = new mongoose.model("User", userSchema);
 /*  userDb Database    Collection: sessions -------------------------------------------------------------------------*/
 //will create method to POST for admin later when building the admin side. Now only for testing purpose
 
+const promptSchema = new mongoose.Schema({
+  label: String,
+  type: { type: String, enum: ["OPEN", "MULTIPLE_CHOICE"] },
+  possibleAnswers: [String],
+  isDisplayed: Boolean
+});
+
 const sessionSchema = new mongoose.Schema({
   topic: String,
   creatorFirstName: String,
-  creatorEmail: String,
-  departmentFilter: String
+  creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  departmentFilter: String,
+  assignedUsers: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
+  prompts: [promptSchema]
 });
+
 const Session = new mongoose.model("Session", sessionSchema);
 
 // app.get("/",function(req,res){
@@ -169,6 +179,72 @@ app.post("/login", function(req, res) {
       }
     }
   });
+});
+
+app.post("/sessions", async function(req, res) {
+  //Creates a session
+  const {
+    topic,
+    creatorFirstName,
+    creatorId,
+    departmentFilter,
+    assignedUserIds,
+    prompts
+  } = req.body;
+
+  const session = {
+    topic,
+    creatorFirstName,
+    creator: creatorId,
+    departmentFilter,
+    assignedUsers: assignedUserIds,
+    prompts
+  };
+
+  const sessionResponse = await Session.create(session);
+  res.json(sessionResponse);
+});
+
+app.put("/sessions/:sessionId", async function(req, res) {
+  //updates a session - must always send the full prompt array
+  const { departmentFilter, assignedUserIds, prompts } = req.body;
+
+  const session = {
+    departmentFilter,
+    assignedUsers: assignedUserIds,
+    prompts
+  };
+
+  const sessionResponse = await Session.findByIdAndUpdate(
+    req.params.sessionId,
+    {
+      $set: session
+    }
+  );
+  res.json(sessionResponse);
+});
+
+app.get("/sessions/:sessionId", async function(req, res) {
+  //updates a session - must always send the full prompt array
+
+  const sessionResponse = await Session.findById(req.params.sessionId);
+  res.json(sessionResponse);
+});
+
+app.get("/sessions", async function(req, res) {
+  // ?userIds=5e3f3da4707e50100544424f,
+  //updates a session - must always send the full prompt array
+
+  const { userIds = "" } = req.query;
+  const userIdsArray = userIds.split(",");
+
+  const filters = {};
+  if (userIdsArray !== []) {
+    filters.assignedUsers = { $in: userIdsArray };
+  }
+
+  const sessionResponse = await Session.find(filters);
+  res.json(sessionResponse);
 });
 
 app.listen(3000, function() {
