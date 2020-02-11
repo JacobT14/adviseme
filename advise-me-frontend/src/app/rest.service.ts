@@ -15,8 +15,6 @@ export class RestService {
   constructor(private http: HttpClient, public auth: AuthService) {}
 
   getHeaders(headers: HttpHeaders = new HttpHeaders()): HttpHeaders {
-    console.log(this.auth.user);
-    console.log(btoa(`${this.auth?.user?.email}:${this.auth?.user?.password}`));
     return headers.append(
       "Authorization",
       "Basic " + btoa(`${this.auth?.user?.email}:${this.auth?.user?.password}`)
