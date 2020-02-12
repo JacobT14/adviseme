@@ -1,10 +1,29 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Router } from "@angular/router";
+import {
+  trigger,
+  transition,
+  style,
+  animate,
+  query
+} from "@angular/animations";
+
+export const fadeAnimation = trigger("fadeAnimation", [
+  transition(":enter", [
+    style({ opacity: 0 }),
+    animate("300ms", style({ opacity: 1 }))
+  ]),
+  transition(":leave", [
+    style({ opacity: 1 }),
+    animate("300ms", style({ opacity: 0 }))
+  ])
+]);
 
 @Component({
   selector: "app-users-list",
   templateUrl: "./users-list.component.html",
-  styleUrls: ["./users-list.component.css"]
+  styleUrls: ["./users-list.component.css"],
+  animations: [fadeAnimation]
 })
 export class UsersListComponent implements OnInit {
   @Input("users") users;

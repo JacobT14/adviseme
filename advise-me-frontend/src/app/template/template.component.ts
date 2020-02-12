@@ -11,15 +11,32 @@ export class TemplateComponent implements OnInit {
 
   constructor(public rest: RestService, public router: Router) { }
 
-  ngOnInit(): void {
+  users: any
+
+  tags: any
+
+  selectedTags: any
+
+
+ async ngOnInit(): Promise<void> {
+    const users = await this.rest.getUsers();
+    this.users = users;
+    const tags = users.map(user => {
+      return {
+        display: `${user.firstName} ${user.lastName}`,
+        value: user,
+        readonly: true
+      }
+    })
+   this.tags = tags;
+  }
+
+  onItemAdded(event) {
+    console.log("HERE!")
+    this.session.assignedUserIds = this.selectedTags.map(tag => tag.value._id)
   }
 
   validationMessage: String;
-  prompt: any = {
-    label: "",
-    type: null,
-    possibleAnswers: null
-  };
 
   session: any={
     topic: "",
@@ -27,9 +44,17 @@ export class TemplateComponent implements OnInit {
     creatorEmail: "",
     departmentFilter: "",
     assignedUserIds: [],
-    prompts: [this.prompt]
+    prompts: []
   }
-  
+
+  addPrompt() {
+    this.session.prompts.push({
+      label: "",
+      type: null,
+      possibleAnswers: null
+    })
+  }
+
 
   close() {
     this.validationMessage = null;
@@ -39,13 +64,13 @@ export class TemplateComponent implements OnInit {
     this.validationMessage = null;
     try {
       //const promptData = await this.rest.createPrompt(this.prompt);
+      console.log(this.session)
       const data = await this.rest.createSession(this.session);
       console.log({ data });
-      localStorage.setItem("session", JSON.stringify(data));
-      
+
     } catch (e) {
       console.log({ e });
     }
-      
+
   }
 }

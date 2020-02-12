@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { TagInputModule } from 'ngx-chips';
 import { NgModule } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -21,6 +22,7 @@ import { MDBBootstrapModule } from "angular-bootstrap-md";
 import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
 import { SessionListComponent } from "./session-list/session-list.component";
 import { TemplateComponent } from './template/template.component';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
 
@@ -46,7 +48,9 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     RouterModule,
     NgbModule,
     MDBBootstrapModule.forRoot(),
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    BrowserAnimationsModule,
+    TagInputModule
   ],
   providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]

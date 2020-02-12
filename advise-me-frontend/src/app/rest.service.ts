@@ -61,7 +61,7 @@ export class RestService {
     }
   }
 
-  async get(url, options: any = {}) {
+  async get(url, options: any = {}) : Promise<any> {
     try {
       const newHeaders = this.getHeaders(options?.headers);
       options.headers = newHeaders;
@@ -79,7 +79,7 @@ export class RestService {
     }
   }
 
-  async getUsers() {
+  async getUsers() : Promise<any> {
     const data = await this.get(`${endpoint}users`);
     return data;
   }

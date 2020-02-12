@@ -1,6 +1,6 @@
 <div class="container mt-5">
     <h1>Create New Session</h1>
-  
+
     <div class="row">
       <div class="col-sm-8">
         <div class="card">
@@ -51,16 +51,16 @@
               </div>
               <div class="form-group">
                 <label for="assignedUsers">Assigned Users</label>
-                <input
-                  [(ngModel)]="session.assignedUserIds"
-                  type="text"
-                  class="form-control"
-                  name="assignedUsers"
-                />
+                <tag-input [(ngModel)]="selectedTags" [onlyFromAutocomplete]="true" (onAdd)="onItemAdded('rawr')" name="selectedTags">
+                  <tag-input-dropdown [autocompleteItems]="tags">
+                  </tag-input-dropdown>
+                </tag-input>
               </div>
               <!--  for promts below,  will create option to add more than one prompt-->
               <h2>Prompt template below:</h2>
               <br>
+              <div *ngFor="let prompt of session.prompts; let i = index">
+                <hr>
               <div class="form-group">
                 <label for="label">Label (Actual Question)</label>
                 <input
@@ -72,10 +72,10 @@
               </div>
               <div class="form-group">
                 <label for="type">Question Type</label>
-                <select [(ngModel)]="prompt.type" class="form-control" id="exampleFormControlSelect1">
+                <select [(ngModel)]="prompt.type" class="form-control" id="exampleFormControlSelect1" name="type">
                     <option>OPEN</option>
                     <option>MULTIPLE_CHOICE</option>
-                    
+
                   </select>
               </div>
               <div class="form-group">
@@ -88,13 +88,14 @@
                   name="label"
                 />
               </div>
+              </div>
               <button type="submit" class="btn btn-dark">Create Session</button>
-              <button type="submit" class="btn btn-light">Add another quesiton</button>
+              <button class="btn btn-light" (click)="addPrompt()">Add another quesiton</button>
             </form>
           </div>
         </div>
       </div>
-  
+
       <!-- <div class="col-sm-4">
         <div class="card social-block">
           <div class="card-body">

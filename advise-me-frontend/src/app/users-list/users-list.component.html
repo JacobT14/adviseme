@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users" (click)="editUser(user)">
+        <tr @fadeAnimation *ngFor="let user of users" (click)="editUser(user)">
           <td>{{ user.email }}</td>
           <td>{{ user.firstName }}</td>
           <td>{{ user.lastName }}</td>
