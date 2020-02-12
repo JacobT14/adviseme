@@ -1,0 +1,109 @@
+<div class="container mt-5">
+    <h1>Create New Session</h1>
+  
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card">
+          <div class="card-body">
+            <ngb-alert
+              *ngIf="validationMessage"
+              [type]="'danger'"
+              (close)="close()"
+              >{{ validationMessage }}</ngb-alert
+            >
+            <!-- Makes POST request to /template route -->
+            <form (ngSubmit)="createSession()">
+              <div class="form-group">
+                <label for="topic">Topic</label>
+                <input
+                  [(ngModel)]="session.topic"
+                  type="text"
+                  class="form-control"
+                  name="topic"
+                />
+              </div>
+              <div class="form-group">
+                <label for="firstName">Creator First Name</label>
+                <input
+                  [(ngModel)]="session.creatorFirstName"
+                  type="text"
+                  class="form-control"
+                  name="firstName"
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  [(ngModel)]="session.creatorEmail"
+                  type="email"
+                  class="form-control"
+                  name="email"
+                />
+              </div>
+              <div class="form-group">
+                <label for="department">Department Requirement</label>
+                <input
+                  [(ngModel)]="session.lastName"
+                  type="text"
+                  class="form-control"
+                  name="department"
+                />
+              </div>
+              <div class="form-group">
+                <label for="assignedUsers">Assigned Users</label>
+                <input
+                  [(ngModel)]="session.assignedUserIds"
+                  type="text"
+                  class="form-control"
+                  name="assignedUsers"
+                />
+              </div>
+              <!--  for promts below,  will create option to add more than one prompt-->
+              <h2>Prompt template below:</h2>
+              <br>
+              <div class="form-group">
+                <label for="label">Label (Actual Question)</label>
+                <input
+                  [(ngModel)]="prompt.label"
+                  type="text"
+                  class="form-control"
+                  name="label"
+                />
+              </div>
+              <div class="form-group">
+                <label for="type">Question Type</label>
+                <select [(ngModel)]="prompt.type" class="form-control" id="exampleFormControlSelect1">
+                    <option>OPEN</option>
+                    <option>MULTIPLE_CHOICE</option>
+                    
+                  </select>
+              </div>
+              <div class="form-group">
+                <label for="answers"> Possible Ansers</label>
+                <input
+                  [(ngModel)]="prompt.possibleAnswers"
+                  data-role="tagsinput"
+                  type="text"
+                  class="form-control"
+                  name="label"
+                />
+              </div>
+              <button type="submit" class="btn btn-dark">Create Session</button>
+              <button type="submit" class="btn btn-light">Add another quesiton</button>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <!-- <div class="col-sm-4">
+        <div class="card social-block">
+          <div class="card-body">
+            <a class="btn btn-block" href="/auth/google" role="button">
+              <i class="fab fa-google"></i>
+              Sign Up with Google
+            </a>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>

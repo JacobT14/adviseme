@@ -5,6 +5,7 @@ import { HomeComponent } from "./home/home.component";
 import { RegisterComponent } from "./register/register.component";
 import { UsersComponent } from "./users/users.component";
 import { UserComponent } from "./user/user.component";
+import { TemplateComponent } from "./template/template.component";
 import { AuthGuardService } from "./auth-guard-service";
 
 const routes: Routes = [
@@ -31,6 +32,14 @@ const routes: Routes = [
   {
     path: "users/:userId",
     component: UserComponent,
+    canActivate: [AuthGuardService],
+    data: {
+      expectedRole: "ADMIN"
+    }
+  },
+  {
+    path: "template",
+    component: TemplateComponent,
     canActivate: [AuthGuardService],
     data: {
       expectedRole: "ADMIN"
