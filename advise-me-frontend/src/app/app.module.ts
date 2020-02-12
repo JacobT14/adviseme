@@ -18,6 +18,10 @@ import { RouterModule } from "@angular/router";
 import { AuthService } from "./authentication/auth-service";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { MDBBootstrapModule } from "angular-bootstrap-md";
+import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
+import { SessionListComponent } from "./session-list/session-list.component";
+
+const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
 
 @NgModule({
   declarations: [
@@ -29,7 +33,8 @@ import { MDBBootstrapModule } from "angular-bootstrap-md";
     AuthenticatedHomeComponent,
     UsersListComponent,
     UsersComponent,
-    UserComponent
+    UserComponent,
+    SessionListComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +43,8 @@ import { MDBBootstrapModule } from "angular-bootstrap-md";
     HttpClientModule,
     RouterModule,
     NgbModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    SocketIoModule.forRoot(config)
   ],
   providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]

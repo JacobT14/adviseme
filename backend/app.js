@@ -2,6 +2,10 @@
 //jshint esversion:6
 
 const express = require("express");
+const http = require("http");
+
+const app = express();
+const server = http.createServer(app);
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
@@ -9,6 +13,18 @@ const mongoose = require("mongoose");
 const encryption = require("mongoose-encryption");
 const cors = require("cors");
 const basicAuth = require("express-basic-auth");
+const io = require("socket.io")(server, {
+  handlePreflightRequest: (req, res) => {
+    console.log("here!");
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+      "Access-Control-Allow-Credentials": true
+    };
+    res.writeHead(200, headers);
+    res.end();
+  }
+});
 
 /* database served on Atlas*/
 mongoose.connect(
@@ -57,7 +73,16 @@ const sessionSchema = new mongoose.Schema({
 
 const Session = new mongoose.model("Session", sessionSchema);
 
-const app = express();
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin,X-Requested-With,Content-Type,Accept,content-type,application/json,Authorization"
+  );
+  next();
+});
 
 const myAsyncAuthorizer = (username, password, cb) => {
   try {
@@ -227,6 +252,8 @@ app.post("/sessions", async function(req, res) {
   };
 
   const sessionResponse = await Session.create(session);
+  console.log("EMITTING!");
+  io.emit("sessionAdded", sessionResponse);
   res.json(sessionResponse);
 });
 
@@ -246,14 +273,25 @@ app.put("/sessions/:sessionId", async function(req, res) {
       $set: session
     }
   );
+
+  io.emit("sessionChanged", sessionResponse);
   res.json(sessionResponse);
 });
 
 app.get("/sessions/:sessionId", async function(req, res) {
   //updates a session - must always send the full prompt array
 
-  const sessionResponse = await Session.findById(req.params.sessionId);
-  res.json(sessionResponse);
+  try {
+    const sessionResponse = await Session.findById(req.params.sessionId);
+    res.json(sessionResponse);
+  } catch (e) {
+    console.log({ e });
+    if (e instanceof mongoose.CastError) {
+      res.status(500).json({ error: "NOT_FOUND" });
+    } else {
+      res.status(500).send();
+    }
+  }
 });
 
 app.get("/sessions", async function(req, res) {
@@ -272,6 +310,8 @@ app.get("/sessions", async function(req, res) {
   res.json(sessionResponse);
 });
 
-app.listen(3000, function() {
-  console.log("Listen on PORT 3000");
+io.on("connection", function(socket) {
+  console.log("connected!");
 });
+
+server.listen(3000);

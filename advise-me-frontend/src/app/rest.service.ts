@@ -5,6 +5,8 @@ import {
   HttpErrorResponse
 } from "@angular/common/http";
 import AuthService from "./authentication/auth-service";
+import { Socket } from "ngx-socket-io";
+import { Session } from "./models/session";
 
 const endpoint = "http://localhost:3000/";
 
@@ -12,7 +14,13 @@ const endpoint = "http://localhost:3000/";
   providedIn: "root"
 })
 export class RestService {
-  constructor(private http: HttpClient, public auth: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    public auth: AuthService,
+    private socket: Socket
+  ) {}
+  sessionsChanged = this.socket.fromEvent<Session>("sessionChanged");
+  sessionsAdded = this.socket.fromEvent<Session>("sessionAdded");
 
   getHeaders(headers: HttpHeaders = new HttpHeaders()): HttpHeaders {
     return headers.append(
