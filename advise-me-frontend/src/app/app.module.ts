@@ -1,5 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { TagInputModule } from 'ngx-chips';
+import { ModalModule } from 'ngx-bootstrap';
 import { NgModule } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -23,6 +24,7 @@ import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
 import { SessionListComponent } from "./session-list/session-list.component";
 import { TemplateComponent } from './template/template.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { UserListSelectorComponent } from './user-list-selector/user-list-selector.component';
 
 const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
 
@@ -38,7 +40,8 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     UsersComponent,
     UserComponent,
     SessionListComponent,
-    TemplateComponent
+    TemplateComponent,
+    UserListSelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,8 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     MDBBootstrapModule.forRoot(),
     SocketIoModule.forRoot(config),
     BrowserAnimationsModule,
-    TagInputModule
+    TagInputModule,
+    ModalModule.forRoot()
   ],
   providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]

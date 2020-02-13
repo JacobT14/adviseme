@@ -27,8 +27,13 @@ export const fadeAnimation = trigger("fadeAnimation", [
 })
 export class UsersListComponent implements OnInit {
   @Input("users") users;
+  @Input("isSelector") isSelector: boolean
 
   constructor(private router: Router) {}
+
+  get selectedUsers () {
+    return this.users.filter(user => user.isSelected);
+  }
 
   ngOnInit(): void {
     console.log("IN HERE!");

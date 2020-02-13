@@ -1,6 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { RestService } from "../rest.service";
 import { Router } from "@angular/router";
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import {UserListSelectorComponent} from "../user-list-selector/user-list-selector.component";
+import {initialState} from "ngx-bootstrap/timepicker/reducer/timepicker.reducer";
+
 
 @Component({
   selector: 'app-template',
@@ -8,8 +13,9 @@ import { Router } from "@angular/router";
   styleUrls: ['./template.component.css']
 })
 export class TemplateComponent implements OnInit {
+  public modalRef: BsModalRef;
 
-  constructor(public rest: RestService, public router: Router) { }
+  constructor(public rest: RestService, public router: Router, private modalService: BsModalService) { }
 
   users: any
 
@@ -58,6 +64,14 @@ export class TemplateComponent implements OnInit {
 
   close() {
     this.validationMessage = null;
+  }
+
+  async assignUsersModal() {
+    const initialState = {users: this.users}
+    this.modalRef = this.modalService.show(UserListSelectorComponent, {  initialState });
+    this.modalRef.content.onClose.subscribe(result => {
+      console.log('results', result);
+    })
   }
 
   async createSession(): Promise<void> {
