@@ -6,6 +6,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import {UserListSelectorComponent} from "../user-list-selector/user-list-selector.component";
 import {initialState} from "ngx-bootstrap/timepicker/reducer/timepicker.reducer";
 import {map} from "rxjs/operators";
+import AuthService from "../authentication/auth-service";
 
 
 @Component({
@@ -16,13 +17,17 @@ import {map} from "rxjs/operators";
 export class TemplateComponent implements OnInit {
   public modalRef: BsModalRef;
 
-  constructor(public rest: RestService, public router: Router, private modalService: BsModalService) { }
+  constructor(public rest: RestService, public router: Router, private modalService: BsModalService, public auth: AuthService) { }
+
+  get selectedUsers() {
+    return this.selectedTags.map(tag => tag.value._id)
+  }
 
   users: any
 
   tags: any
 
-  selectedTags: any
+  selectedTags: any = []
 
   Ids: any
 
@@ -40,18 +45,11 @@ export class TemplateComponent implements OnInit {
    this.tags = tags;
   }
 
-  /*onItemAdded(event) {
-    this.session.assignedUserIds = this.Ids.map(x => x._id);
-    console.log("HERE!");
-  }
-  */
-
   validationMessage: String;
 
   session: any={
     topic: "",
-    creatorFirstName: "",
-    creatorId: "",
+    creatorId: this.auth.user._id,
     departmentFilter: "",
     assignedUserIds: [],
     prompts: [],
@@ -74,10 +72,6 @@ export class TemplateComponent implements OnInit {
     const initialState = {users: this.users}
     this.modalRef = this.modalService.show(UserListSelectorComponent, {  initialState });
     this.modalRef.content.onClose.subscribe(result => {
-
-      this.Ids=result;
-      
-      console.log('results', result);
       if (typeof result === "object") {
         this.selectedTags = result.map(user => {
           return {
@@ -92,15 +86,15 @@ export class TemplateComponent implements OnInit {
 
   async createSession(): Promise<void> {
     this.validationMessage = null;
-    
+
     try {
-      //
-      this.session.assignedUserIds = this.Ids.map(x => x._id);
-      console.log(this.session);
-      this.rest.createSession(this.session);
-    
-      
-    
+      this.session.assignedUserIds = this.selectedUsers
+      console.log(this.session)
+      const createdSession = await this.rest.createSession(this.session);
+
+      console.log({createdSession})
+
+
 
     } catch (e) {
       console.log({ e });
