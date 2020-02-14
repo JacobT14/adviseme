@@ -24,6 +24,8 @@ export class TemplateComponent implements OnInit {
 
   selectedTags: any
 
+  Ids: any
+
 
  async ngOnInit(): Promise<void> {
     const users = await this.rest.getUsers();
@@ -38,20 +40,21 @@ export class TemplateComponent implements OnInit {
    this.tags = tags;
   }
 
-  onItemAdded(event) {
-    console.log("HERE!")
-    this.session.assignedUserIds = this.selectedTags.map(tag => tag.value._id)
+  /*onItemAdded(event) {
+    this.session.assignedUserIds = this.Ids.map(x => x._id);
+    console.log("HERE!");
   }
+  */
 
   validationMessage: String;
 
   session: any={
     topic: "",
     creatorFirstName: "",
-    creatorEmail: "",
+    creatorId: "",
     departmentFilter: "",
     assignedUserIds: [],
-    prompts: []
+    prompts: [],
   }
 
   addPrompt() {
@@ -71,6 +74,9 @@ export class TemplateComponent implements OnInit {
     const initialState = {users: this.users}
     this.modalRef = this.modalService.show(UserListSelectorComponent, {  initialState });
     this.modalRef.content.onClose.subscribe(result => {
+
+      this.Ids=result;
+      
       console.log('results', result);
       if (typeof result === "object") {
         this.selectedTags = result.map(user => {
@@ -86,15 +92,20 @@ export class TemplateComponent implements OnInit {
 
   async createSession(): Promise<void> {
     this.validationMessage = null;
+    
     try {
-      //const promptData = await this.rest.createPrompt(this.prompt);
-      console.log(this.session)
-      const data = await this.rest.createSession(this.session);
-      console.log({ data });
+      //
+      this.session.assignedUserIds = this.Ids.map(x => x._id);
+      console.log(this.session);
+      this.rest.createSession(this.session);
+    
+      
+    
 
     } catch (e) {
       console.log({ e });
     }
+
 
   }
 }

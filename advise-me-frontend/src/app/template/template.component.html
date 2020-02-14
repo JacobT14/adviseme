@@ -28,32 +28,32 @@
                   [(ngModel)]="session.creatorFirstName"
                   type="text"
                   class="form-control"
-                  name="firstName"
+                  name="creatorFirstName"
                 />
               </div>
               <div class="form-group">
-                <label for="email">Email</label>
+                <label for="email">Creator ID</label>
                 <input
-                  [(ngModel)]="session.creatorEmail"
-                  type="email"
+                  [(ngModel)]="session.creatorId"
+                  type="text"
                   class="form-control"
-                  name="email"
+                  name="creatorId"
                 />
               </div>
               <div class="form-group">
                 <label for="department">Department Requirement</label>
                 <input
-                  [(ngModel)]="session.lastName"
+                  [(ngModel)]="session.departmentFilter"
                   type="text"
                   class="form-control"
-                  name="department"
+                  name="departmentFilter"
                 />
               </div>
               <div class="form-group">
                 <label for="assignedUsers">Assigned Users</label>
                 <br>
                 <button (click)="assignUsersModal()">Assign Users</button>
-                <tag-input [(ngModel)]="selectedTags" [onlyFromAutocomplete]="true" (onAdd)="onItemAdded('rawr')" name="selectedTags">
+                <tag-input [(ngModel)]="selectedTags" [onlyFromAutocomplete]="true"  name="selectedTags">
                   <tag-input-dropdown [autocompleteItems]="tags">
                   </tag-input-dropdown>
                 </tag-input>

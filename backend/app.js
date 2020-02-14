@@ -199,6 +199,7 @@ app.post('/sessions', async function (req, res) {
     assignedUserIds,
     prompts,
   } = req.body
+  console.log(req.body);
 
   const session = {
     topic,

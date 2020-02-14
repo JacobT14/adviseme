@@ -38,7 +38,7 @@ const routes: Routes = [
     }
   },
   {
-    path: "template",
+    path: "sessions",
     component: TemplateComponent,
     canActivate: [AuthGuardService],
     data: {
