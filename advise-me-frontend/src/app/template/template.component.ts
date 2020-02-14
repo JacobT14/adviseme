@@ -5,6 +5,7 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import {UserListSelectorComponent} from "../user-list-selector/user-list-selector.component";
 import {initialState} from "ngx-bootstrap/timepicker/reducer/timepicker.reducer";
+import {map} from "rxjs/operators";
 
 
 @Component({
@@ -31,7 +32,7 @@ export class TemplateComponent implements OnInit {
       return {
         display: `${user.firstName} ${user.lastName}`,
         value: user,
-        readonly: true
+        readonly: false
       }
     })
    this.tags = tags;
@@ -71,6 +72,15 @@ export class TemplateComponent implements OnInit {
     this.modalRef = this.modalService.show(UserListSelectorComponent, {  initialState });
     this.modalRef.content.onClose.subscribe(result => {
       console.log('results', result);
+      if (typeof result === "object") {
+        this.selectedTags = result.map(user => {
+          return {
+            display: `${user.firstName} ${user.lastName}`,
+            value: user,
+            readonly: false
+          }
+        })
+      }
     })
   }
 

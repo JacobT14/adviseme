@@ -7,6 +7,9 @@
   </div>
   <app-users-list [users]="users" [isSelector]="true"></app-users-list>
   <div class="modal-footer">
+    <label for="numOfSelection"># of random users</label>
+    <input [(ngModel)]="numOfSelection" type="number" label="# of random users">
+    <button type="button" class="btn btn-secondary" (click)="getRandomSample()">Generate Random Sample</button>
     <button type="button" class="btn btn-secondary" (click)="onConfirm()">Yes</button>
     <button type="button" class="btn btn-secondary" (click)="onCancel()">No</button>
   </div>
