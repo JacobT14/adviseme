@@ -1,61 +1,33 @@
-<nav
-  *ngIf="auth.isAuthenticated"
-  class="navbar navbar-expand-lg navbar-dark bg-dark"
->
+<nav *ngIf="auth.isAuthenticated" class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="#">AdviseMe</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNavDropdown"
-    aria-controls="navbarNavDropdown"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-    (click)="toggleCollapsed()"
-  >
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleCollapsed()">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div
-    class="collapse navbar-collapse"
-    id="navbarSupportedContent"
-    [ngClass]="{ collapse: collapsed, 'navbar-collapse': true }"
-  >
+  <div class="collapse navbar-collapse" id="navbarSupportedContent"
+    [ngClass]="{ collapse: collapsed, 'navbar-collapse': true }">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item">
-        <a
-          class="nav-link"
-          href="home"
-          routerLink="/home"
-          routerLinkActive="active"
-          >Home</a
-        >
+        <a class="nav-link" href="home" routerLink="/home" routerLinkActive="active">Home</a>
+      </li>
+      <li class="nav-item" *ngIf="auth.isAdmin" >
+        <a class="nav-link" href="session-list" routerLink="/session-list" routerLinkActive="active">Session List</a>
       </li>
       <li class="nav-item" *ngIf="auth.isAdmin">
-        <a
-          class="nav-link"
-          href="/users"
-          routerLink="/users"
-          routerLinkActive="active"
-          >Users</a
-        >
+        <a class="nav-link" href="/users" routerLink="/users" routerLinkActive="active">Users</a>
+      </li>
+      <li class="nav-item" *ngIf="auth.isAdmin">
+        <a class="nav-link" href="/sessions" routerLink="/sessions" routerLinkActive="active">Create New Session</a>
       </li>
     </ul>
     <ul class="navbar-nav my-auto my-2 my-lg-0">
       <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          id="navbarDropdownMenuLink-333"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
           <i class="fas fa-user"></i>
         </a>
-        <div
-          class="dropdown-menu dropdown-menu-right dropdown-default"
-          aria-labelledby="navbarDropdownMenuLink-333"
-        >
+        <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
           <a class="dropdown-item" (click)="logout()">Logout</a>
         </div>
       </li>
