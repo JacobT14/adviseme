@@ -7,6 +7,7 @@ import {UserListSelectorComponent} from "../user-list-selector/user-list-selecto
 import {initialState} from "ngx-bootstrap/timepicker/reducer/timepicker.reducer";
 import {map} from "rxjs/operators";
 import AuthService from "../authentication/auth-service";
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -16,8 +17,9 @@ import AuthService from "../authentication/auth-service";
 })
 export class TemplateComponent implements OnInit {
   public modalRef: BsModalRef;
+  sessionForm: FormGroup;
 
-  constructor(public rest: RestService, public router: Router, private modalService: BsModalService, public auth: AuthService) { }
+  constructor(private fb: FormBuilder, public rest: RestService, public router: Router, private modalService: BsModalService, public auth: AuthService) { }
 
   get selectedUsers() {
     return this.selectedTags.map(tag => tag.value._id)
@@ -33,6 +35,16 @@ export class TemplateComponent implements OnInit {
 
 
  async ngOnInit(): Promise<void> {
+  this.sessionForm = this.fb.group({
+    topic: [, Validators.required],
+    departmentFilter: [, Validators.required],
+    selectedTags: [, Validators.required],
+    label: [,],
+    type: [, ],
+    possibleAnswers: [, ]
+  });
+
+
     const users = await this.rest.getUsers();
     this.users = users;
     const tags = users.map(user => {

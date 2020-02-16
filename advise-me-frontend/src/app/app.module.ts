@@ -8,7 +8,7 @@ import { AppComponent } from "./app.component";
 import { LoginComponent } from "./login/login.component";
 import { HomeComponent } from "./home/home.component";
 import { RegisterComponent } from "./register/register.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { NavigationComponent } from "./navigation/navigation.component";
 import { AuthenticatedHomeComponent } from "./authenticated-home/authenticated-home.component";
@@ -47,6 +47,7 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
     NgbModule,

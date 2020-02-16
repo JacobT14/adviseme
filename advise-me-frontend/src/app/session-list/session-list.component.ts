@@ -36,12 +36,15 @@ export class SessionListComponent implements OnInit {
     );
   }
 
-  get selectedUsers () {
-    return this.sessions.filter(session => session.isSelected);
-  }
+ 
 
   create(): void {
     this.router.navigateByUrl("/sessions");
+  }
+
+  editSession(session): void {
+    console.log({ session });
+    //this.router.navigate([`/users`, user.email]);
   }
 
   

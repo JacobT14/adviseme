@@ -12,7 +12,7 @@
               >{{ validationMessage }}</ngb-alert
             >
             <!-- Makes POST request to /template route -->
-            <form (ngSubmit)="createSession()">
+            <form [formGroup]="sessionForm" id="sessionForm">
               <div class="form-group">
                 <label for="topic">Topic</label>
                 <input
@@ -20,6 +20,7 @@
                   type="text"
                   class="form-control"
                   name="topic"
+                  formControlName="topic"
                 />
               </div>
               <div class="form-group">
@@ -29,13 +30,14 @@
                   type="text"
                   class="form-control"
                   name="departmentFilter"
+                  formControlName="departmentFilter"
                 />
               </div>
               <div class="form-group">
                 <label for="assignedUsers">Assigned Users</label>
                 <br>
                 <button (click)="assignUsersModal()">Assign Users</button>
-                <tag-input [(ngModel)]="selectedTags" [onlyFromAutocomplete]="true"  name="selectedTags">
+                <tag-input [(ngModel)]="selectedTags" [onlyFromAutocomplete]="true"  name="selectedTags" formControlName="selectedTags">
                   <tag-input-dropdown [autocompleteItems]="tags">
                   </tag-input-dropdown>
                 </tag-input>
@@ -52,11 +54,12 @@
                   type="text"
                   class="form-control"
                   name="label"
+                  formControlName="label"
                 />
               </div>
               <div class="form-group">
                 <label for="type">Question Type</label>
-                <select [(ngModel)]="prompt.type" class="form-control" id="exampleFormControlSelect1" name="type">
+                <select [(ngModel)]="prompt.type" class="form-control" id="exampleFormControlSelect1" name="type" formControlName="type">
                     <option>OPEN</option>
                     <option>MULTIPLE_CHOICE</option>
 
@@ -69,11 +72,12 @@
                   data-role="tagsinput"
                   type="text"
                   class="form-control"
-                  name="label"
+                  name="possibleAnswers"
+                  formControlName="possibleAnswers"
                 />
               </div>
               </div>
-              <button type="submit" class="btn btn-dark">Create Session</button>
+              <button (click)="createSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >Create Session</button>
               <button class="btn btn-light" (click)="addPrompt()">Add another quesiton</button>
             </form>
           </div>
