@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div *ngIf="!session.isActive" class="container mt-5">
     <h1>Create New Session</h1>
 
     <div class="row">
@@ -14,9 +14,8 @@
             <!-- Makes POST request to /template route -->
             <form [formGroup]="sessionForm" id="sessionForm">
               <div class="form-group">
-                <label for="topic">Topic</label>
+                <label>Topic</label>
                 <input
-                  [(ngModel)]="session.topic"
                   type="text"
                   class="form-control"
                   name="topic"
@@ -24,9 +23,8 @@
                 />
               </div>
               <div class="form-group">
-                <label for="department">Department Requirement</label>
+                <label>Department Requirement</label>
                 <input
-                  [(ngModel)]="session.departmentFilter"
                   type="text"
                   class="form-control"
                   name="departmentFilter"
@@ -34,10 +32,10 @@
                 />
               </div>
               <div class="form-group">
-                <label for="assignedUsers">Assigned Users</label>
+                <label>Assigned Users</label>
                 <br>
                 <button (click)="assignUsersModal()">Assign Users</button>
-                <tag-input [(ngModel)]="selectedTags" [onlyFromAutocomplete]="true"  name="selectedTags" formControlName="selectedTags">
+                <tag-input [onlyFromAutocomplete]="true"  name="selectedTags" formControlName="selectedTags">
                   <tag-input-dropdown [autocompleteItems]="tags">
                   </tag-input-dropdown>
                 </tag-input>
@@ -45,12 +43,12 @@
               <!--  for promts below,  will create option to add more than one prompt-->
               <h2>Prompt template below:</h2>
               <br>
-              <div *ngFor="let prompt of session.prompts; let i = index">
+              <div formArrayName="prompts" *ngFor="let prompt of promptControls; let i = index" >
                 <hr>
+                <div [formGroupName]="i">
               <div class="form-group">
-                <label for="label">Label (Actual Question)</label>
+                <label>Label (Actual Question)</label>
                 <input
-                  [(ngModel)]="prompt.label"
                   type="text"
                   class="form-control"
                   name="label"
@@ -58,26 +56,26 @@
                 />
               </div>
               <div class="form-group">
-                <label for="type">Question Type</label>
-                <select [(ngModel)]="prompt.type" class="form-control" id="exampleFormControlSelect1" name="type" formControlName="type">
+                <label>Question Type</label>
+                <select formControlName="type" class="form-control" id="exampleFormControlSelect1"  name="type">
                     <option>OPEN</option>
                     <option>MULTIPLE_CHOICE</option>
-
                   </select>
               </div>
               <div class="form-group">
-                <label for="answers"> Possible Ansers</label>
+                <label> Possible Ansers</label>
                 <input
-                  [(ngModel)]="prompt.possibleAnswers"
+                  formControlName="possibleAnswers"
                   data-role="tagsinput"
                   type="text"
                   class="form-control"
                   name="possibleAnswers"
-                  formControlName="possibleAnswers"
                 />
               </div>
               </div>
-              <button (click)="createSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >Create Session</button>
+              </div>
+              <button *ngIf="isAddMode" (click)="createSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >Create Session</button>
+              <button *ngIf="!isAddMode" (click)="saveSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >Save</button>
               <button class="btn btn-light" (click)="addPrompt()">Add another quesiton</button>
             </form>
           </div>

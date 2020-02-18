@@ -48,7 +48,7 @@ const sessionSchema = new mongoose.Schema({
   creatorFirstName: String,
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   departmentFilter: String,
-  assignedUsers: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
+  assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   prompts: [promptSchema]
 });
 

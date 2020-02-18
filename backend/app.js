@@ -252,7 +252,8 @@ app.get('/sessions/:sessionId', async function (req, res) {
   //updates a session - must always send the full prompt array
 
   try {
-    const sessionResponse = await Session.findById(req.params.sessionId)
+    const sessionResponse = await Session.findById(req.params.sessionId).populate({path: 'assignedUsers'})
+    console.log({sessionResponse})
     res.json(sessionResponse)
   } catch (e) {
     console.log({ e })

@@ -19,6 +19,7 @@ export class RestService {
     public auth: AuthService,
     private socket: Socket
   ) {}
+
   sessionsChanged = this.socket.fromEvent<Session>("sessionChanged");
   sessionsAdded = this.socket.fromEvent<Session>("sessionAdded");
 
@@ -63,8 +64,11 @@ export class RestService {
 
   async get(url, options: any = {}) : Promise<any> {
     try {
+      console.log({options})
       const newHeaders = this.getHeaders(options?.headers);
       options.headers = newHeaders;
+
+      console.log({options})
 
       console.log({ options });
 
@@ -120,8 +124,9 @@ export class RestService {
   }
 
   async getSessionsByUserIds(userIds: [String]) {
+    console.log({userIds})
     return this.get(`${endpoint}sessions`, {
-      params: userIds
+      params: {userIds}
     });
   }
 }

@@ -10,33 +10,43 @@ import {
   animate,
   query
 } from "@angular/animations";
+import AuthService from "../authentication/auth-service";
+import {fadeAnimation} from "../users-list/users-list.component";
 
 
 @Component({
   selector: "app-session-list",
   templateUrl: "./session-list.component.html",
   styleUrls: ["./session-list.component.css"],
- 
+  animations: [fadeAnimation]
+
 })
 export class SessionListComponent implements OnInit {
 
-  @Input("sessions") sessions;
-  @Input("isSelector") isSelector: boolean
-  constructor(private rest: RestService, private router: Router) {}
+  constructor(private rest: RestService, private router: Router, private auth: AuthService) {}
 
+  sessions: []
   ngOnInit(): void {
     const sessionsAddedSub = this.rest.sessionsAdded.subscribe(session => {
       console.log({ session });
       console.log(session._id);
-      
+
     });
     console.log(this.sessions);
     const sessionsChangedSub = this.rest.sessionsChanged.subscribe(session =>
       console.log(session._id + " CHANGED")
     );
+    console.log("loading!")
+    this.loadSessions()
   }
 
- 
+ async loadSessions() {
+    console.log("loading sessions")
+    this.sessions = await this.rest.getSessionsByUserIds([this.auth.user._id])
+   console.log(this.sessions)
+  }
+
+
 
   create(): void {
     this.router.navigateByUrl("/sessions");
@@ -44,8 +54,8 @@ export class SessionListComponent implements OnInit {
 
   editSession(session): void {
     console.log({ session });
-    //this.router.navigate([`/users`, user.email]);
+    this.router.navigate([`/sessions`, session._id]);
   }
 
-  
+
 }
