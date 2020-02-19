@@ -62,6 +62,7 @@ export class RestService {
     }
   }
 
+
   async get(url, options: any = {}) : Promise<any> {
     try {
       console.log({options})
@@ -116,6 +117,10 @@ export class RestService {
   }
 
   async updateSession(sessionId, sessionUpdates) {
+    return this.put(`${endpoint}sessions/${sessionId}`, sessionUpdates);
+  }
+
+  async activateSession(sessionId, sessionUpdates) {
     return this.put(`${endpoint}sessions/${sessionId}`, sessionUpdates);
   }
 
