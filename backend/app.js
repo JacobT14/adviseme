@@ -281,8 +281,6 @@ app.put('/sessions/:sessionId', async function (req, res) {
   console.log(req.body);
   //updates a session - must always send the full prompt array
   if (req.body.isActive==true) {
-
-
     const sessionResponse = await Session.update({
         _id: req.params.sessionId
       }, {
@@ -295,15 +293,16 @@ app.put('/sessions/:sessionId', async function (req, res) {
           throw err;
         } else {
           console.log(" document(s) updated");
-
         }
-
-
       }
     )
     console.log({
       sessionResponse
     });
+    io.emit('sessionChanged', sessionResponse)
+    res.json(sessionResponse)
+    console.log(req.body);
+    console.log(req.params);
 
   } else {
     const {
