@@ -293,6 +293,7 @@ app.put('/sessions/:sessionId', async function (req, res) {
           throw err;
         } else {
           console.log(" document(s) updated");
+          
         }
       }
     )
@@ -331,6 +332,7 @@ app.put('/sessions/:sessionId', async function (req, res) {
     console.log(req.body);
     console.log(req.params);
   }
+  
 
 })
 

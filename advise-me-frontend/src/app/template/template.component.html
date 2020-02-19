@@ -98,3 +98,4 @@
 
   <div *ngIf="session.isActive" class="container mt-5">
     <h1>Welcome to this session. Waiting on Admin...</h1>
+    <button *ngIf="!isAddMode" (click)="saveSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >End Session</button>

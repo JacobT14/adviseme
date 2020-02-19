@@ -176,7 +176,8 @@ export class TemplateComponent implements OnInit {
       console.log(this.sessionForm)
       const createdSession = await this.rest.updateSession(this.sessionId, this.sessionToSend);
 
-      console.log({createdSession})
+      console.log({createdSession});
+      this.router.navigateByUrl("/session-list");
 
 
 
@@ -198,10 +199,8 @@ export class TemplateComponent implements OnInit {
       console.log(sessionToActivate);
       const activatedSession=await this.rest.activateSession(this.sessionId, sessionToActivate);
       console.log({activatedSession});
-      //const createdSession = await this.rest.updateSession(this.sessionId, this.sessionToSend);
-
-      //console.log({createdSession})
-
+      this.router.navigateByUrl("/session-list");
+      
 
 
     } catch (e) {
