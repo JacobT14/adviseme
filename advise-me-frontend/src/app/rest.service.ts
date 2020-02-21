@@ -129,6 +129,12 @@ export class RestService {
     return this.get(`${endpoint}sessions/${id}`);
   }
 
+
+  async answerPrompt(sessionId, promptId, response) {
+
+    return this.post(`${endpoint}/sessions/${sessionId}/prompts/${promptId}/answer-prompt`, {response});
+  }
+
   async getSessionsByUserIds(userIds: [String]) {
     console.log({userIds})
     return this.get(`${endpoint}sessions`, {

@@ -50,17 +50,11 @@ const routes: Routes = [
     path: "sessions",
     component: TemplateComponent,
     canActivate: [AuthGuardService],
-    data: {
-      expectedRole: "ADMIN"
-    }
   },
   {
     path: "sessions/:sessionId",
     component: TemplateComponent,
     canActivate: [AuthGuardService],
-    data: {
-      expectedRole: "ADMIN"
-    }
   },
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "**", redirectTo: "home", pathMatch: "full" }

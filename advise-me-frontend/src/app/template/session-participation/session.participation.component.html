@@ -1,5 +1,5 @@
 <div *ngIf="session.isActive" class="container mt-5">
-  <h1>{{session.topic}}</h1>
+  <h1>Welcome to {{session.topic}} Session</h1>
 
   <div class="row">
     <div class="col-sm-8">
@@ -14,6 +14,31 @@
           <div *ngFor="let item of displayedItems">
             <p>DISPLAY SESSION STUFF HERE</p>
             <p>{{item}}</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- admin card stuff here -->
+    <div *ngIf="auth.isAdmin" class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <ngb-alert
+            *ngIf="validationMessage"
+            [type]="'danger'"
+            (close)="close()"
+          >{{ validationMessage }}</ngb-alert
+          >
+          <p>Admin!</p>
+          <div *ngFor="let item of session.prompts">
+
+            <div class="card">
+              <div class="card-body">
+                <p>Question: {{item.label}}</p>
+                <button (click)="askQuestion(item)" [disabled]="!item.displayIndex" class="btn btn-secondary">Ask Question</button>
+              </div>
+            </div>
           </div>
 
         </div>

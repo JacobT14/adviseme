@@ -18,7 +18,7 @@ import {sortBy, filter} from 'lodash'
 })
 export class SessionParticipationComponent implements OnInit {
 
-  //Items pushed into the array will be shown in the session
+  // Items pushed into the array will be shown in the session
   displayedItems = []
 
   constructor( public rest: RestService, public router: Router, public auth: AuthService, public route: ActivatedRoute) {
@@ -65,5 +65,13 @@ export class SessionParticipationComponent implements OnInit {
   }
   close() {
     this.validationMessage = null;
+  }
+
+  answerPrompt(item, response) {
+    this.rest.answerPrompt(this.session._id, item._id, response)
+  }
+
+  askQuestion(item) {
+
   }
 }

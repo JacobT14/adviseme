@@ -30,6 +30,7 @@ const User = new mongoose.model("User", userSchema);
 /*  userDb Database    Collection: sessions -------------------------------------------------------------------------*/
 //will create method to POST for admin later when building the admin side. Now only for testing purpose
 
+//Response will either be free response, or index of the multiple choice item
 const userAnswerSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   response: String

@@ -42,6 +42,13 @@ export class TemplateComponent implements OnInit {
     return this.prompts.controls
   }
 
+  pushBackToHomeCheck() {
+    if (this.auth.isAdvisor)
+    {
+      this.router.navigateByUrl("/home")
+    }
+  }
+
  async ngOnInit(): Promise<void> {
   this.sessionForm = this.fb.group({
     topic: [, Validators.required],
@@ -55,11 +62,15 @@ export class TemplateComponent implements OnInit {
      const sessionId = params.sessionId
      this.sessionId = sessionId
      if (typeof sessionId === "undefined") {
+       this.pushBackToHomeCheck()
        this.isAddMode = true;
      } else {
 
        this.isAddMode = false
        this.session = await this.rest.getSessionById(sessionId);
+       if (!this.session.isActive) {
+         this.pushBackToHomeCheck()
+       }
        console.log(this.session)
        this.sessionForm.patchValue({
          topic: this.session.topic,
@@ -195,12 +206,12 @@ export class TemplateComponent implements OnInit {
     console.log({sessionToActivate});
     try {
       console.log(this.sessionForm);
-      
+
       console.log(sessionToActivate);
       const activatedSession=await this.rest.activateSession(this.sessionId, sessionToActivate);
       console.log({activatedSession});
       this.router.navigateByUrl("/session-list");
-      
+
 
 
     } catch (e) {
