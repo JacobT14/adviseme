@@ -35,9 +35,14 @@ export class SessionParticipationComponent implements OnInit {
     });
 
     this.rest.promptAsked.subscribe(session => {
+      console.log('GOT CHANGE!')
+      if (session._id === this.session._id) {
+        console.log({session})
         this.session = session
         const prompts = this.activePrompts
         this.displayedItems.push(prompts[prompts.length - 1])
+      }
+
       }
     );
   }
@@ -72,17 +77,21 @@ export class SessionParticipationComponent implements OnInit {
   }
 
   isPromptDisplayed(prompt) {
-    if (prompt.displayIndex === 0) {
-      return true
+    if (typeof prompt.displayIndex === "undefined") {
+      return false
     }
-    return !isEmpty(prompt.displayIndex)
+    return true
   }
 
   hasAnsweredQuestion(prompt) {
     return prompt.answers.find(answer => answer.user === this.auth.user._id)
   }
 
-  askQuestion(item) {
+  async askQuestion(item) {
     // TODO: implement
+    const displayIndex = this.activePrompts.length
+    console.log({displayIndex})
+    const newSession = await this.rest.updatePrompt(this.session._id, item._id, displayIndex)
+    console.log({newSession})
   }
 }

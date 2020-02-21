@@ -53,6 +53,7 @@ export class RestService {
         headers: this.getHeaders()
       };
       const data = await this.http.put(url, body, httpOptions).toPromise();
+      console
       return data;
     } catch (err) {
       console.log({ err });
@@ -132,7 +133,12 @@ export class RestService {
 
   async answerPrompt(sessionId, promptId, response) {
 
-    return this.post(`${endpoint}/sessions/${sessionId}/prompts/${promptId}/answer-prompt`, {response});
+    return this.post(`${endpoint}sessions/${sessionId}/prompts/${promptId}/answer-prompt`, {response});
+  }
+
+  async updatePrompt(sessionId, promptId, displayIndex) {
+
+    return this.put(`${endpoint}sessions/${sessionId}/prompts/${promptId}`, {displayIndex});
   }
 
   async getSessionsByUserIds(userIds: [String]) {

@@ -36,6 +36,7 @@
             <div class="card">
               <div class="card-body">
                 <p>Question: {{item.label}}</p>
+                <p>Question: {{item.displayIndex}}</p>
                 <p>{{isPromptDisplayed(item)}}</p>
                 <button (click)="askQuestion(item)" [disabled]="isPromptDisplayed(item)" class="btn btn-secondary">Ask Question</button>
               </div>

@@ -40,7 +40,7 @@ const promptSchema = new mongoose.Schema({
   label: String,
   type: { type: String, enum: ["OPEN", "MULTIPLE_CHOICE"] },
   possibleAnswers: [String],
-  isDisplayed: Boolean,
+  displayIndex: Number,
   answers: [userAnswerSchema]
 });
 
