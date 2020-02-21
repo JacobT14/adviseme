@@ -25,6 +25,7 @@ import { SessionListComponent } from "./session-list/session-list.component";
 import { TemplateComponent } from './template/template.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UserListSelectorComponent } from './user-list-selector/user-list-selector.component';
+import {SessionParticipationComponent} from "./template/session-participation/session.participation.component";
 
 const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
 
@@ -41,7 +42,8 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     UserComponent,
     SessionListComponent,
     TemplateComponent,
-    UserListSelectorComponent
+    UserListSelectorComponent,
+    SessionParticipationComponent,
   ],
   imports: [
     BrowserModule,
