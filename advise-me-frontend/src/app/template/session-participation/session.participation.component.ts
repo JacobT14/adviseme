@@ -8,7 +8,7 @@ import {initialState} from "ngx-bootstrap/timepicker/reducer/timepicker.reducer"
 import {map} from "rxjs/operators";
 import AuthService from "../../authentication/auth-service";
 import {FormGroup, FormBuilder, FormControl, Validators, FormArray} from '@angular/forms';
-import {sortBy, filter} from 'lodash'
+import {sortBy, filter, isEmpty} from 'lodash'
 
 
 @Component({
@@ -71,7 +71,14 @@ export class SessionParticipationComponent implements OnInit {
     this.rest.answerPrompt(this.session._id, item._id, response)
   }
 
-  askQuestion(item) {
+  isPromptDisplayed(prompt) {
+    if (prompt.displayIndex === 0) {
+      return true
+    }
+    return !isEmpty(prompt.displayIndex)
+  }
 
+  askQuestion(item) {
+// TODO: implement
   }
 }
