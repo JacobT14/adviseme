@@ -78,6 +78,10 @@ export class SessionParticipationComponent implements OnInit {
     return !isEmpty(prompt.displayIndex)
   }
 
+  hasAnsweredQuestion(prompt) {
+    return prompt.answers.find(answer => answer.user === this.auth.user._id)
+  }
+
   askQuestion(item) {
     // TODO: implement
   }
