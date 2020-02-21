@@ -147,6 +147,7 @@ export class TemplateComponent implements OnInit {
     console.log({sessionToSend})
     sessionToSend.assignedUserIds = sessionToSend.selectedTags.map(tag => tag.value._id)
     delete sessionToSend.selectedTags
+    sessionToSend.isActive=false;
     return sessionToSend
   }
 
@@ -175,8 +176,31 @@ export class TemplateComponent implements OnInit {
       console.log(this.sessionForm)
       const createdSession = await this.rest.updateSession(this.sessionId, this.sessionToSend);
 
-      console.log({createdSession})
+      console.log({createdSession});
+      this.router.navigateByUrl("/session-list");
 
+
+
+    } catch (e) {
+      console.log({ e });
+    }
+
+
+  }
+
+  async activateSession(): Promise<void> {
+    this.validationMessage = null;
+    const sessionToActivate=this.sessionToSend;
+    sessionToActivate.isActive=true;
+    console.log({sessionToActivate});
+    try {
+      console.log(this.sessionForm);
+      
+      console.log(sessionToActivate);
+      const activatedSession=await this.rest.activateSession(this.sessionId, sessionToActivate);
+      console.log({activatedSession});
+      this.router.navigateByUrl("/session-list");
+      
 
 
     } catch (e) {

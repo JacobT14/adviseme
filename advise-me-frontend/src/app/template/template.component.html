@@ -77,6 +77,7 @@
               <button *ngIf="isAddMode" (click)="createSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >Create Session</button>
               <button *ngIf="!isAddMode" (click)="saveSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >Save</button>
               <button class="btn btn-light" (click)="addPrompt()">Add another quesiton</button>
+              <button *ngIf="!isAddMode" (click)="activateSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-primary" >Activate</button>
             </form>
           </div>
         </div>
@@ -96,3 +97,7 @@
   </div>
 <app-session-participation *ngIf="session.isActive"></app-session-participation>
 
+
+  <div *ngIf="session.isActive" class="container mt-5">
+    <h1>Welcome to this session. Waiting on Admin...</h1>
+    <button *ngIf="!isAddMode" (click)="saveSession()" form="sessionForm" [disabled]="sessionForm.invalid" class="btn btn-dark" >End Session</button>

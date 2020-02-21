@@ -45,6 +45,7 @@ const promptSchema = new mongoose.Schema({
 
 const sessionSchema = new mongoose.Schema({
   topic: String,
+  isActive: Boolean,
   creatorFirstName: String,
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   departmentFilter: String,
