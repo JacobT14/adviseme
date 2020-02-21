@@ -59,10 +59,10 @@ export class SessionParticipationComponent implements OnInit {
     return sortBy(activePrompts, 'displayIndex')
   }
 
-
   get inactivePrompts() {
     return this.session.prompts.filter(prompt => typeof prompt.displayIndex === "undefined")
   }
+
   close() {
     this.validationMessage = null;
   }
@@ -79,6 +79,6 @@ export class SessionParticipationComponent implements OnInit {
   }
 
   askQuestion(item) {
-// TODO: implement
+    // TODO: implement
   }
 }

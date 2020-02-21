@@ -13,7 +13,7 @@
           >
           <div *ngFor="let item of displayedItems">
             <p>DISPLAY SESSION STUFF HERE</p>
-            <p>{{item}}</p>
+            <p>{{item.label}}</p>
           </div>
 
         </div>
@@ -36,7 +36,8 @@
             <div class="card">
               <div class="card-body">
                 <p>Question: {{item.label}}</p>
-                <button (click)="askQuestion(item)" [disabled]="!item.displayIndex" class="btn btn-secondary">Ask Question</button>
+                <p>{{isPromptDisplayed(item)}}</p>
+                <button (click)="askQuestion(item)" [disabled]="isPromptDisplayed(item)" class="btn btn-secondary">Ask Question</button>
               </div>
             </div>
           </div>
