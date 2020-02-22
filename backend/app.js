@@ -68,6 +68,13 @@ const myAsyncAuthorizer = (username, password, cb) => {
   }
 }
 
+//Email advisers API. WIll send when admin activate the session
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
+
+
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -330,7 +337,35 @@ app.put('/sessions/:sessionId', async function (req, res) {
     console.log(req.body)
     console.log(req.params)
 
-  } else {
+    //send emails
+    const assignedUserIds=req.body.assignedUserIds;
+    
+    for (n=0;n<assignedUserIds.length;n++){
+      User.findById(assignedUserIds[n],function(err, res){
+        if(err){
+          throw err
+        }else{
+          const msg = {
+            to: res.email,
+            from: 'brotherhui521@gmail.com',
+            subject: '<AdviseMe Project> Advising Session is active now',
+            text: 'Welcome!',
+            html: '<strong>Welcome!</strong><p>Please join the session by clicking this <a href="http://localhost:4200/sessions/'+req.params.sessionId+'">Link</a></p>',
+          };
+          sgMail.send(msg, (error, result) => {
+          if (error) {
+            console.log(error);
+          }
+          else {
+            console.log("success");
+          }
+          });
+          
+        }
+      })
+    }
+  } 
+  else {
     const {
       departmentFilter,
       assignedUserIds,
