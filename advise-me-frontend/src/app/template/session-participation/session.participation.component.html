@@ -12,8 +12,22 @@
           >{{ validationMessage }}</ngb-alert
           >
           <div *ngFor="let item of displayedItems">
-            <p>DISPLAY SESSION STUFF HERE</p>
-            <p>{{item.label}}</p>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Q{{item.displayIndex + 1}}: {{item.label}}</h5>
+                <label for="answer">Response</label>
+                <div *ngIf="item.type === 'OPEN'">
+                  <input type="text" [(ngModel)]="item.answer" name="answer" id="answer" class="form-control">
+                  <br>
+                  <button (click)="answerPrompt(item, item.answer)" class="btn btn-secondary">Submit</button>
+                </div>
+                <div *ngIf="item.type === 'MULTIPLE_CHOICE'">
+                  <div *ngFor="let answer of item.possibleAnswers; let i = index">
+                  <button (click)="answerPrompt(item, i)" class="btn btn-secondary">{{answer}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -42,8 +56,9 @@
               </div>
             </div>
           </div>
+          <br>
 
-          <button    class="btn btn-dark" >End Session</button>
+          <button class="btn btn-dark">End Session</button>
 
         </div>
       </div>

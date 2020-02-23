@@ -1,8 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
-import { RestService } from "../rest.service";
+import {Component, OnInit, ElementRef, ViewChild} from "@angular/core";
+import {RestService} from "../rest.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal';
 import {UserListSelectorComponent} from "../user-list-selector/user-list-selector.component";
 import {initialState} from "ngx-bootstrap/timepicker/reducer/timepicker.reducer";
 import {map} from "rxjs/operators";
@@ -19,7 +19,8 @@ export class TemplateComponent implements OnInit {
   public modalRef: BsModalRef;
   sessionForm: FormGroup;
 
-  constructor(private fb: FormBuilder, public rest: RestService, public router: Router, private modalService: BsModalService, public auth: AuthService, public route: ActivatedRoute) { }
+  constructor(private fb: FormBuilder, public rest: RestService, public router: Router, private modalService: BsModalService, public auth: AuthService, public route: ActivatedRoute) {
+  }
 
   get selectedUsers() {
     return this.selectedTags.map(tag => tag.value._id)
@@ -43,49 +44,52 @@ export class TemplateComponent implements OnInit {
   }
 
   pushBackToHomeCheck() {
-    if (this.auth.isAdvisor)
-    {
+    if (this.auth.isAdvisor) {
       this.router.navigateByUrl("/home")
     }
   }
 
- async ngOnInit(): Promise<void> {
-  this.sessionForm = this.fb.group({
-    topic: [, Validators.required],
-    departmentFilter: [, Validators.required],
-    selectedTags: [, Validators.required],
-    prompts: this.fb.array([ this.createPrompt()]),
-    creatorId: [this.auth.user._id]
-  });
+  async ngOnInit(): Promise<void> {
+    this.sessionForm = this.fb.group({
+      topic: [, Validators.required],
+      departmentFilter: [, Validators.required],
+      selectedTags: [, Validators.required],
+      prompts: this.fb.array([this.createPrompt()]),
+      creatorId: [this.auth.user._id]
+    });
 
-   this.route.params.subscribe(async params => {
-     const sessionId = params.sessionId
-     this.sessionId = sessionId
-     if (typeof sessionId === "undefined") {
-       this.pushBackToHomeCheck()
-       this.isAddMode = true;
-     } else {
+    this.route.params.subscribe(async params => {
+      const sessionId = params.sessionId
+      this.sessionId = sessionId
+      if (typeof sessionId === "undefined") {
+        this.pushBackToHomeCheck()
+        this.isAddMode = true;
+      } else {
 
-       this.isAddMode = false
-       this.session = await this.rest.getSessionById(sessionId);
-       if (!this.session.isActive) {
-         this.pushBackToHomeCheck()
-       }
-       console.log(this.session)
-       this.sessionForm.patchValue({
-         topic: this.session.topic,
-         departmentFilter: this.session.departmentFilter,
-         prompts: this.session.prompts,
-         selectedTags: this.session.assignedUsers.map(user => {
-           return {
-             display: `${user.firstName} ${user.lastName}`,
-             value: user,
-             readonly: false
-           }
-         })
-       })
-     }
-   });
+        this.isAddMode = false
+        this.session = await this.rest.getSessionById(sessionId);
+        console.log(this.session)
+        if (!this.session.isActive) {
+          this.pushBackToHomeCheck()
+        }
+        console.log(this.session.prompts)
+        this.sessionForm.patchValue({
+          topic: this.session.topic,
+          departmentFilter: this.session.departmentFilter,
+          selectedTags: this.session.assignedUsers.map(user => {
+            return {
+              display: `${user.firstName} ${user.lastName}`,
+              value: user,
+              readonly: false
+            }
+          })
+        })
+        this.session.prompts.forEach((prompt) => this.addPrompt(prompt))
+        console.log(this.sessionForm.value.prompts)
+      }
+    });
+
+
 
 
     const users = await this.rest.getUsers();
@@ -97,14 +101,14 @@ export class TemplateComponent implements OnInit {
         readonly: false
       }
     })
-   this.tags = tags;
+    this.tags = tags;
 
     console.log(this.sessionForm)
   }
 
   validationMessage: String;
 
-  session: any={
+  session: any = {
     topic: "",
     creatorId: this.auth.user._id,
     departmentFilter: "",
@@ -112,11 +116,13 @@ export class TemplateComponent implements OnInit {
     prompts: [],
   }
 
-  addPrompt() {
+  addPrompt(prompt?) {
+    console.log({prompt})
     this.prompts = this.sessionForm.get('prompts') as FormArray;
     console.log(this.prompts)
-    this.prompts.push(this.createPrompt());
-    this.session.prompts.push({
+    this.prompts.push(this.createPrompt(prompt));
+    console.log(this.prompts)
+    this.session.prompts.push(prompt || {
       label: "",
       type: null,
       possibleAnswers: null
@@ -128,17 +134,17 @@ export class TemplateComponent implements OnInit {
     this.validationMessage = null;
   }
 
-  createPrompt(): FormGroup {
+  createPrompt(prompt?): FormGroup {
     return this.fb.group({
-      label: '',
-      type: 'OPEN',
-      possibleAnswers: []
+      label: prompt?.label || '',
+      type: prompt?.type || 'OPEN',
+      possibleAnswers: [prompt?.possibleAnswers] || []
     });
   }
 
   async assignUsersModal() {
     const initialState = {users: this.users}
-    this.modalRef = this.modalService.show(UserListSelectorComponent, {  initialState });
+    this.modalRef = this.modalService.show(UserListSelectorComponent, {initialState});
     this.modalRef.content.onClose.subscribe(result => {
       if (typeof result === "object") {
         const selectedTagsArray = this.sessionForm.get('selectedTags') as FormArray;
@@ -157,8 +163,11 @@ export class TemplateComponent implements OnInit {
     const sessionToSend = Object.assign({}, this.sessionForm.value);
     console.log({sessionToSend})
     sessionToSend.assignedUserIds = sessionToSend.selectedTags.map(tag => tag.value._id)
+    sessionToSend.prompts.forEach((prompt) => {
+      prompt.possibleAnswers = prompt.possibleAnswers?.map((answer) => answer.value)
+    })
     delete sessionToSend.selectedTags
-    sessionToSend.isActive=false;
+    sessionToSend.isActive = false;
     return sessionToSend
   }
 
@@ -172,9 +181,8 @@ export class TemplateComponent implements OnInit {
       console.log({createdSession})
 
 
-
     } catch (e) {
-      console.log({ e });
+      console.log({e});
     }
 
 
@@ -191,9 +199,8 @@ export class TemplateComponent implements OnInit {
       this.router.navigateByUrl("/session-list");
 
 
-
     } catch (e) {
-      console.log({ e });
+      console.log({e});
     }
 
 
@@ -201,21 +208,20 @@ export class TemplateComponent implements OnInit {
 
   async activateSession(): Promise<void> {
     this.validationMessage = null;
-    const sessionToActivate=this.sessionToSend;
-    sessionToActivate.isActive=true;
+    const sessionToActivate = this.sessionToSend;
+    sessionToActivate.isActive = true;
     console.log({sessionToActivate});
     try {
       console.log(this.sessionForm);
 
       console.log(sessionToActivate);
-      const activatedSession=await this.rest.activateSession(this.sessionId, sessionToActivate);
+      const activatedSession = await this.rest.activateSession(this.sessionId, sessionToActivate);
       console.log({activatedSession});
       this.router.navigateByUrl("/session-list");
 
 
-
     } catch (e) {
-      console.log({ e });
+      console.log({e});
     }
 
 
