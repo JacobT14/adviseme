@@ -21,7 +21,7 @@ export class SessionParticipationComponent implements OnInit {
   // Items pushed into the array will be shown in the session
   displayedItems = []
 
-  constructor( public rest: RestService, public router: Router, public auth: AuthService, public route: ActivatedRoute) {
+  constructor(public rest: RestService, public router: Router, public auth: AuthService, public route: ActivatedRoute) {
   }
 
 
@@ -32,19 +32,43 @@ export class SessionParticipationComponent implements OnInit {
       console.log(this.session)
       console.log(this.activePrompts)
       this.displayedItems.push(...this.activePrompts)
+      this.syncAnswers()
     });
 
     this.rest.promptAsked.subscribe(session => {
-      console.log('GOT CHANGE!')
-      if (session._id === this.session._id) {
-        console.log({session})
-        this.session = session
-        const prompts = this.activePrompts
-        this.displayedItems.push(prompts[prompts.length - 1])
-      }
+        console.log('GOT CHANGE!')
+        if (session._id === this.session._id) {
+          console.log({session})
+          this.session = session
+          const prompts = this.activePrompts
+          this.displayedItems.push(prompts[prompts.length - 1])
+        }
 
       }
     );
+
+    this.rest.sessionsChanged.subscribe(session => {
+        console.log('GOT CHANGE!')
+        if (session._id === this.session._id) {
+          //sync prompt responses
+          this.session.prompts = session.prompts;
+          this.syncAnswers()
+        }
+
+      }
+    );
+  }
+
+  syncAnswers() {
+    this.displayedItems.forEach((displayItem, index) => {
+      const matchingPrompt = this.session.prompts.find((prompt) => {
+        return prompt._id === displayItem._id
+      })
+      if (matchingPrompt) {
+        matchingPrompt.answer = this.promptResponse(matchingPrompt)
+        this.displayedItems[index] = matchingPrompt
+      }
+    })
   }
 
   validationMessage: String;
@@ -58,7 +82,7 @@ export class SessionParticipationComponent implements OnInit {
   }
 
   get activePrompts() {
-    const activePrompts =  filter(this.session.prompts,  (prompt) => {
+    const activePrompts = filter(this.session.prompts, (prompt) => {
       return typeof prompt.displayIndex !== "undefined"
     })
     return sortBy(activePrompts, 'displayIndex')
@@ -73,6 +97,7 @@ export class SessionParticipationComponent implements OnInit {
   }
 
   answerPrompt(item, response) {
+    console.log({response})
     this.rest.answerPrompt(this.session._id, item._id, response)
   }
 
@@ -83,8 +108,8 @@ export class SessionParticipationComponent implements OnInit {
     return true
   }
 
-  hasAnsweredQuestion(prompt) {
-    return prompt.answers.find(answer => answer.user === this.auth.user._id)
+  promptResponse(prompt) {
+    return prompt.answers.find(answer => answer.user === this.auth.user._id)?.response
   }
 
   async askQuestion(item) {

@@ -57,14 +57,14 @@
                 </div>
                 <div class="form-group">
                   <label>Question Type</label>
-                  <select formControlName="type" class="form-control" id="exampleFormControlSelect1" name="type">
+                  <select formControlName="type" class="form-control" id="exampleFormControlSelect{{i}}" name="type">
                     <option>OPEN</option>
                     <option>MULTIPLE_CHOICE</option>
                   </select>
                 </div>
                 <div class="form-group" *ngIf="prompt.value.type === 'MULTIPLE_CHOICE'">
                   <label> Possible Answers:</label>
-                  <tag-input name="possibleAnswers" formControlName="possibleAnswers">
+                  <tag-input name="possibleAnswers" formControlName="possibleAnswers" modelAsStrings="true">
                   </tag-input>
                 </div>
               </div>

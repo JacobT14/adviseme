@@ -9,19 +9,24 @@ const answerPrompt = async args => {
     return prompt._id == promptId;
   });
 
-  if (prompt.answers.find(answerPrompt => {
+  const matchingPrompt = prompt.answers.find(answerPrompt => {
     console.log({answerPrompt, user})
     console.log(answerPrompt.user)
     console.log(user._id)
     console.log(answerPrompt.user.equals(user._id))
     return answerPrompt.user.equals(user._id)
-  })) {
-    console.log("HERE!")
-    throw { ERROR: "ALREADY_ANSWERED" };
+  })
+  if (matchingPrompt) {
+    matchingPrompt.response = response
+    console.log({ session })
+    session.save();
   }
-  prompt.answers.push({ user: user._id, response });
-  console.log({session})
-  session.save();
+  else {
+
+    prompt.answers.push({ user: user._id, response });
+    console.log({ session })
+    session.save();
+  }
 
   io.emit("sessionChanged", session);
   return session;

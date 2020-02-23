@@ -84,6 +84,8 @@ export class TemplateComponent implements OnInit {
             }
           })
         })
+        this.prompts = this.sessionForm.get('prompts') as FormArray;
+        this.prompts.clear()
         this.session.prompts.forEach((prompt) => this.addPrompt(prompt))
         console.log(this.sessionForm.value.prompts)
       }
@@ -127,6 +129,7 @@ export class TemplateComponent implements OnInit {
       type: null,
       possibleAnswers: null
     })
+    console.log(this.sessionForm)
   }
 
 
@@ -135,6 +138,7 @@ export class TemplateComponent implements OnInit {
   }
 
   createPrompt(prompt?): FormGroup {
+    console.log({prompt})
     return this.fb.group({
       label: prompt?.label || '',
       type: prompt?.type || 'OPEN',
@@ -160,12 +164,10 @@ export class TemplateComponent implements OnInit {
   }
 
   get sessionToSend() {
+    console.log(this.sessionForm.value)
     const sessionToSend = Object.assign({}, this.sessionForm.value);
     console.log({sessionToSend})
     sessionToSend.assignedUserIds = sessionToSend.selectedTags.map(tag => tag.value._id)
-    sessionToSend.prompts.forEach((prompt) => {
-      prompt.possibleAnswers = prompt.possibleAnswers?.map((answer) => answer.value)
-    })
     delete sessionToSend.selectedTags
     sessionToSend.isActive = false;
     return sessionToSend
@@ -192,7 +194,6 @@ export class TemplateComponent implements OnInit {
     this.validationMessage = null;
 
     try {
-      console.log(this.sessionForm)
       const createdSession = await this.rest.updateSession(this.sessionId, this.sessionToSend);
 
       console.log({createdSession});

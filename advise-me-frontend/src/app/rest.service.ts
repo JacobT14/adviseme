@@ -20,9 +20,9 @@ export class RestService {
     private socket: Socket
   ) {}
 
-  sessionsChanged = this.socket.fromEvent<Session>("sessionChanged");
-  sessionsAdded = this.socket.fromEvent<Session>("sessionAdded");
-  promptAsked = this.socket.fromEvent<Session>("promptAsked");
+  sessionsChanged = this.socket.fromEvent<any>("sessionChanged");
+  sessionsAdded = this.socket.fromEvent<any>("sessionAdded");
+  promptAsked = this.socket.fromEvent<any>("promptAsked");
 
   getHeaders(headers: HttpHeaders = new HttpHeaders()): HttpHeaders {
     return headers.append(

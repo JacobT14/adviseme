@@ -12,22 +12,29 @@
           >{{ validationMessage }}</ngb-alert
           >
           <div *ngFor="let item of displayedItems">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Q{{item.displayIndex + 1}}: {{item.label}}</h5>
-                <label for="answer">Response</label>
-                <div *ngIf="item.type === 'OPEN'">
-                  <input type="text" [(ngModel)]="item.answer" name="answer" id="answer" class="form-control">
-                  <br>
-                  <button (click)="answerPrompt(item, item.answer)" class="btn btn-secondary">Submit</button>
-                </div>
-                <div *ngIf="item.type === 'MULTIPLE_CHOICE'">
-                  <div *ngFor="let answer of item.possibleAnswers; let i = index">
-                  <button (click)="answerPrompt(item, i)" class="btn btn-secondary">{{answer}}</button>
+            <form>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Q{{item.displayIndex + 1}}: {{item.label}}</h5>
+                  <label for="answer">Response</label>
+                  <div *ngIf="item.type === 'OPEN'">
+                    <input type="text" [(ngModel)]="item.answer" name="answer" id="answer" class="form-control">
+                    <br>
+                    <button (click)="answerPrompt(item, item.answer)" class="btn btn-secondary">Submit</button>
+                  </div>
+                  <div id="outer" *ngIf="item.type === 'MULTIPLE_CHOICE'">
+                    <div class="inner" *ngFor="let answer of item.possibleAnswers; let i = index">
+
+                      <button (click)="answerPrompt(item, i)" class="btn btn-secondary">
+                        {{promptResponse(item) === i.toString() ? "**" : ""}}{{answer}}
+                      </button>
+                      &nbsp;
+                    </div>
                   </div>
                 </div>
+
               </div>
-            </div>
+            </form>
           </div>
 
         </div>
@@ -46,17 +53,18 @@
           >
           <p>Admin!</p>
           <div *ngFor="let item of session.prompts">
-
             <div class="card">
               <div class="card-body">
                 <p>Question: {{item.label}}</p>
                 <p>Question: {{item.displayIndex}}</p>
                 <p>{{isPromptDisplayed(item)}}</p>
+
                 <button (click)="askQuestion(item)" [disabled]="isPromptDisplayed(item)" class="btn btn-secondary">Ask Question</button>
+
               </div>
             </div>
+            <br>
           </div>
-          <br>
 
           <button class="btn btn-dark">End Session</button>
 
