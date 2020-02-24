@@ -17,12 +17,19 @@ import {sortBy, filter, isEmpty} from 'lodash'
   styleUrls: ['./session.participation.component.css']
 })
 export class SessionParticipationComponent implements OnInit {
-
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   // Items pushed into the array will be shown in the session
   displayedItems = []
 
+  chatMessage: String
+
   constructor(public rest: RestService, public router: Router, public auth: AuthService, public route: ActivatedRoute) {
   }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
 
 
   async ngOnInit(): Promise<void> {
@@ -53,6 +60,16 @@ export class SessionParticipationComponent implements OnInit {
           //sync prompt responses
           this.session.prompts = session.prompts;
           this.syncAnswers()
+        }
+
+      }
+    );
+
+    this.rest.chatMessage.subscribe(message => {
+        console.log('GOT message!')
+        console.log({message})
+        if (message.sessionId === this.session._id) {
+          this.displayedItems.push(message.message)
         }
 
       }
@@ -118,5 +135,19 @@ export class SessionParticipationComponent implements OnInit {
     console.log({displayIndex})
     const newSession = await this.rest.updatePrompt(this.session._id, item._id, displayIndex)
     console.log({newSession})
+  }
+
+  sendMessage() {
+    this.rest.sendMessage(this.session._id, {
+      user: this.auth.user,
+      message: this.chatMessage
+    })
+    this.chatMessage = ""
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }
   }
 }

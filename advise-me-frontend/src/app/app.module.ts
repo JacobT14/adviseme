@@ -26,6 +26,8 @@ import { TemplateComponent } from './template/template.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UserListSelectorComponent } from './user-list-selector/user-list-selector.component';
 import {SessionParticipationComponent} from "./template/session-participation/session.participation.component";
+import { SessionParticipationChatComponent } from './template/session-participation/session-participation-chat/session-participation-chat.component';
+import { SessionParticipationPromptsComponent } from './template/session-participation/session-participation-prompts/session-participation-prompts.component';
 
 const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
 
@@ -44,6 +46,8 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     TemplateComponent,
     UserListSelectorComponent,
     SessionParticipationComponent,
+    SessionParticipationChatComponent,
+    SessionParticipationPromptsComponent,
   ],
   imports: [
     BrowserModule,

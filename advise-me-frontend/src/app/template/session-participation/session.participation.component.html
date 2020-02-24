@@ -3,41 +3,20 @@
 
   <div class="row">
     <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
+      <div class="card"  style="height: 70vh;">
+        <div class="card-body overflow-auto" #scrollMe>
           <ngb-alert
             *ngIf="validationMessage"
             [type]="'danger'"
             (close)="close()"
           >{{ validationMessage }}</ngb-alert
           >
-          <div *ngFor="let item of displayedItems">
-            <form>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Q{{item.displayIndex + 1}}: {{item.label}}</h5>
-                  <label for="answer">Response</label>
-                  <div *ngIf="item.type === 'OPEN'">
-                    <input type="text" [(ngModel)]="item.answer" name="answer" id="answer" class="form-control">
-                    <br>
-                    <button (click)="answerPrompt(item, item.answer)" class="btn btn-secondary">Submit</button>
-                  </div>
-                  <div id="outer" *ngIf="item.type === 'MULTIPLE_CHOICE'">
-                    <div class="inner" *ngFor="let answer of item.possibleAnswers; let i = index">
+          <app-session-participation-prompts [session]="session" [displayedItems]="displayedItems"></app-session-participation-prompts>
 
-                      <button (click)="answerPrompt(item, i)" class="btn btn-secondary">
-                        {{promptResponse(item) === i.toString() ? "**" : ""}}{{answer}}
-                      </button>
-                      &nbsp;
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </form>
-            <br>
-          </div>
-
+        </div>
+        <div class="card-footer text-muted">
+          Chat: <input type="text" style="width: 80%" [(ngModel)]="chatMessage">
+          &nbsp;<button class="btn btn-secondary" (click)="sendMessage()">Send</button>
         </div>
       </div>
     </div>

@@ -442,6 +442,11 @@ app.get('/sessions', async function (req, res) {
 
 io.on('connection', function (socket) {
   console.log('connected!')
+  socket.on('chatMessage', function(msg){
+    console.log('message: ' + msg);
+    io.emit('chatMessage', msg)
+  });
 })
+
 
 server.listen(3000)

@@ -23,6 +23,17 @@ export class RestService {
   sessionsChanged = this.socket.fromEvent<any>("sessionChanged");
   sessionsAdded = this.socket.fromEvent<any>("sessionAdded");
   promptAsked = this.socket.fromEvent<any>("promptAsked");
+  chatMessage = this.socket.fromEvent<any>("chatMessage");
+
+  sendMessage(sessionId, message) {
+    console.log('emitting!')
+    console.log({sessionId, message})
+    this.socket.emit("chatMessage", {
+      sessionId,
+      message
+    })
+    // this.socket.emit('chat')
+  }
 
   getHeaders(headers: HttpHeaders = new HttpHeaders()): HttpHeaders {
     return headers.append(

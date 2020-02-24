@@ -1,0 +1,33 @@
+<div *ngFor="let item of displayedItems">
+  <form>
+    <div *ngIf="item.message">
+      <app-session-participation-chat [message]="item"></app-session-participation-chat>
+    </div>
+    <div *ngIf="item.type">
+      <div class="card">
+        <div class="card-body">
+
+
+          <h5 class="card-title">Q{{item.displayIndex + 1}}: {{item.label}}</h5>
+          <label for="answer">Response</label>
+          <div *ngIf="item.type === 'OPEN'">
+            <input type="text" [(ngModel)]="item.answer" name="answer" id="answer" class="form-control">
+            <br>
+            <button (click)="answerPrompt(item, item.answer)" class="btn btn-secondary">Submit</button>
+          </div>
+          <div id="outer" *ngIf="item.type === 'MULTIPLE_CHOICE'">
+            <div class="inner" *ngFor="let answer of item.possibleAnswers; let i = index">
+
+              <button (click)="answerPrompt(item, i)" class="btn btn-secondary">
+                {{promptResponse(item) === i.toString() ? "**" : ""}}{{answer}}
+              </button>
+              &nbsp;
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+  <br>
+</div>
