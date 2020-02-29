@@ -15,6 +15,7 @@ const {
   Session,
   User,
   mongoose,
+  Chat,
 } = require('./models/index')
 const app = express()
 const server = http.createServer(app)
@@ -69,11 +70,8 @@ const myAsyncAuthorizer = (username, password, cb) => {
 }
 
 //Email advisers API. WIll send when admin activate the session
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-
-
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 app.use(
   bodyParser.urlencoded({
@@ -338,34 +336,32 @@ app.put('/sessions/:sessionId', async function (req, res) {
     console.log(req.params)
 
     //send emails
-    const assignedUserIds=req.body.assignedUserIds;
-    
-    for (n=0;n<assignedUserIds.length;n++){
-      User.findById(assignedUserIds[n],function(err, res){
-        if(err){
+    const assignedUserIds = req.body.assignedUserIds
+
+    for (n = 0; n < assignedUserIds.length; n++) {
+      User.findById(assignedUserIds[n], function (err, res) {
+        if (err) {
           throw err
-        }else{
+        } else {
           const msg = {
             to: res.email,
             from: 'brotherhui521@gmail.com',
             subject: '<AdviseMe Project> Advising Session is active now',
             text: 'Welcome!',
-            html: '<strong>Welcome!</strong><p>Please join the session by clicking this <a href="http://localhost:4200/sessions/'+req.params.sessionId+'">Link</a></p>',
-          };
+            html: '<strong>Welcome!</strong><p>Please join the session by clicking this <a href="http://localhost:4200/sessions/' + req.params.sessionId + '">Link</a></p>',
+          }
           sgMail.send(msg, (error, result) => {
-          if (error) {
-            console.log(error);
-          }
-          else {
-            console.log("success");
-          }
-          });
-          
+            if (error) {
+              console.log(error)
+            } else {
+              console.log('success')
+            }
+          })
+
         }
       })
     }
-  } 
-  else {
+  } else {
     const {
       departmentFilter,
       assignedUserIds,
@@ -440,13 +436,47 @@ app.get('/sessions', async function (req, res) {
   res.json(sessionResponse)
 })
 
-io.on('connection', function (socket) {
-  console.log('connected!')
-  socket.on('chatMessage', function(msg){
-    console.log('message: ' + msg);
-    io.emit('chatMessage', msg)
-  });
+app.get('/chats', async function (req, res) {
+
+  const {
+    user: username,
+  } = req.auth
+
+  const user = await User.findOne({ email: username })
+
+  const chats = await Chat.find({
+    users: {
+      $in: user._id,
+    },
+  }).populate({
+    path: 'users',
+  })
+
+  console.log({chats, user})
+  res.json(chats)
 })
 
+io.on('connection', function (socket) {
+  console.log('connected!')
+  socket.on('chatMessage', function (msg) {
+    console.log('message: ' + msg)
+    io.emit('chatMessage', msg)
+  })
+  socket.on('privateMessage', async function (msg) {
+    console.log({msg})
+    const chat = await Chat.findById(msg.chatId)
+    chat.messages.push(msg.message)
+    chat.save()
+    console.log('emitting!')
+    io.emit('privateMessage', msg)
+  })
+  socket.on('startPrivateMessage', function (msg) {
+    console.log('message: ' + msg)
+    console.log({msg: msg.message.messages})
+    const chat = new Chat(msg.message)
+    chat.save()
+    io.emit('startPrivateMessage', msg)
+  })
+})
 
 server.listen(3000)

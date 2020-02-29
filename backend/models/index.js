@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 const encryption = require('mongoose-encryption')
 
 /* database served on Atlas*/
 mongoose.connect(
-  "mongodb+srv://kevin:kevin123@cluster0-oecwm.mongodb.net/userDb",
+  'mongodb+srv://kevin:kevin123@cluster0-oecwm.mongodb.net/userDb',
   {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-);
+    useUnifiedTopology: true,
+  },
+)
 
 /*  userDb        Database    ---------------------------------------------------------------------------*/
 const userSchema = new mongoose.Schema({
@@ -18,13 +18,13 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   title: String,
   department: String,
-  permissionLevel: String
-});
+  permissionLevel: String,
+})
 
 //const secret="Thisisourlittlesecret.";
 //need a encryption method. Haven't set up yet.Use Jacob's authentication
 //userSchema.plugin(encryption,{secret: secret, encryptedFields: ["password"]});
-const User = new mongoose.model("User", userSchema);
+const User = new mongoose.model('User', userSchema)
 //---------------------------------------------------------------------------------------------------------
 
 /*  userDb Database    Collection: sessions -------------------------------------------------------------------------*/
@@ -32,28 +32,40 @@ const User = new mongoose.model("User", userSchema);
 
 //Response will either be free response, or index of the multiple choice item
 const userAnswerSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  response: String
-});
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  response: String,
+})
 
 const promptSchema = new mongoose.Schema({
   label: String,
-  type: { type: String, enum: ["OPEN", "MULTIPLE_CHOICE"] },
+  type: { type: String, enum: ['OPEN', 'MULTIPLE_CHOICE'] },
   possibleAnswers: [String],
   displayIndex: Number,
-  answers: [userAnswerSchema]
-});
+  answers: [userAnswerSchema],
+})
 
 const sessionSchema = new mongoose.Schema({
   topic: String,
   isActive: Boolean,
   creatorFirstName: String,
-  creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   departmentFilter: String,
-  assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  prompts: [promptSchema]
-});
+  assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  prompts: [promptSchema],
+})
 
-const Session = new mongoose.model("Session", sessionSchema);
+const messageSchema = new mongoose.Schema({
+  from: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  message: String,
+  time: Date,
+})
 
-module.exports = { Session, User, mongoose };
+const chatSchema = new mongoose.Schema({
+  users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  messages: [messageSchema]
+})
+
+const Session = new mongoose.model('Session', sessionSchema)
+const Chat = new mongoose.model('Chat', chatSchema)
+
+module.exports = { Session, User, mongoose, Chat }

@@ -24,6 +24,8 @@ export class RestService {
   sessionsAdded = this.socket.fromEvent<any>("sessionAdded");
   promptAsked = this.socket.fromEvent<any>("promptAsked");
   chatMessage = this.socket.fromEvent<any>("chatMessage");
+  privateMessage = this.socket.fromEvent<any>("privateMessage");
+  startPrivateMessageSub = this.socket.fromEvent<any>("startPrivateMessage");
 
   sendMessage(sessionId, message) {
     console.log('emitting!')
@@ -31,6 +33,25 @@ export class RestService {
     this.socket.emit("chatMessage", {
       sessionId,
       message
+    })
+    // this.socket.emit('chat')
+  }
+
+  sendPrivateMessage(chatId, message) {
+    console.log('emitting!')
+    console.log({chatId, message})
+    this.socket.emit("privateMessage", {
+      chatId,
+      message,
+    })
+    // this.socket.emit('chat')
+  }
+
+  startPrivateMessage(message) {
+    console.log('emitting!')
+    console.log({message})
+    this.socket.emit("startPrivateMessage", {
+      message,
     })
     // this.socket.emit('chat')
   }
@@ -78,13 +99,8 @@ export class RestService {
 
   async get(url, options: any = {}) : Promise<any> {
     try {
-      console.log({options})
       const newHeaders = this.getHeaders(options?.headers);
       options.headers = newHeaders;
-
-      console.log({options})
-
-      console.log({ options });
 
       const data = await this.http.get(url, options).toPromise();
       return data;
@@ -139,6 +155,11 @@ export class RestService {
 
   async getSessionById(id) {
     return this.get(`${endpoint}sessions/${id}`);
+  }
+
+  async getChats() {
+    console.log('GETTING CHATS!')
+    return this.get(`${endpoint}chats`);
   }
 
 

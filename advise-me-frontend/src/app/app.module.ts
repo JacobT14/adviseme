@@ -28,6 +28,9 @@ import { UserListSelectorComponent } from './user-list-selector/user-list-select
 import {SessionParticipationComponent} from "./template/session-participation/session.participation.component";
 import { SessionParticipationChatComponent } from './template/session-participation/session-participation-chat/session-participation-chat.component';
 import { SessionParticipationPromptsComponent } from './template/session-participation/session-participation-prompts/session-participation-prompts.component';
+import { ChatComponent } from './chat/chat/chat.component';
+import { ChatListComponent } from './chat/chat-list/chat-list.component';
+import { ChatCombinedComponent } from './chat/chat-combined/chat-combined.component';
 
 const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
 
@@ -48,6 +51,9 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     SessionParticipationComponent,
     SessionParticipationChatComponent,
     SessionParticipationPromptsComponent,
+    ChatComponent,
+    ChatListComponent,
+    ChatCombinedComponent,
   ],
   imports: [
     BrowserModule,

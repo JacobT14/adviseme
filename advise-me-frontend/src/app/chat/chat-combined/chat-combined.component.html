@@ -1,0 +1,9 @@
+<h1>Chat</h1>
+<div class="row messaging">
+  <div class="col-sm-3">
+    <app-chat-list *ngIf="users.length > 0" [chats]="chats" (onChatSelected)="setSelectedChat($event)" style="height: 70vh;"></app-chat-list>
+  </div>
+  <div class="col-sm-6">
+    <app-chat [users]="users" [chat]="selectedChat" style="height: 70vh;"></app-chat>
+  </div>
+</div>

@@ -8,6 +8,8 @@ import { UserComponent } from "./user/user.component";
 import { TemplateComponent } from "./template/template.component";
 import { AuthGuardService } from "./auth-guard-service";
 import {SessionListComponent} from "./session-list/session-list.component";
+import {ChatListComponent} from "./chat/chat-list/chat-list.component";
+import {ChatCombinedComponent} from "./chat/chat-combined/chat-combined.component";
 
 const routes: Routes = [
   {
@@ -54,6 +56,11 @@ const routes: Routes = [
   {
     path: "sessions/:sessionId",
     component: TemplateComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: "chat",
+    component: ChatCombinedComponent,
     canActivate: [AuthGuardService],
   },
   { path: "", redirectTo: "home", pathMatch: "full" },

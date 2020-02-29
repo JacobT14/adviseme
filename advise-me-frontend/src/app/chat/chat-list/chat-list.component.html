@@ -1,0 +1,18 @@
+<div class="card" style="height: 70vh;">
+  <div class="card-body overflow-auto">
+    <div *ngFor="let chat of chats">
+      <div class="chat_list" [ngClass]="{'active_chat': isSelected(chat)}" (click)="setSelectedChat(chat)">
+        <div class="chat_people">
+          <div class="chat_img"><img src="https://ptetutorials.com/images/user-profile.png"></div>
+          <div class="chat_ib">
+            <h5>{{getDisplayNames(chat)}}<span class="chat_date">{{chat.messages[chat.messages.length - 1].time}}</span></h5>
+            <p>{{chat.messages[chat.messages.length - 1].message}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
